@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14503F">
+<title>মাদরাসা ব্যবস্থাপনা</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+<style>
+:root {
+  --bg: #f3f6f4;
+  --surface: #ffffff;
+  --ink: #17231d;
+  --muted: #5d6d64;
+  --line: #d8e1db;
+  --brand: #14503f;
+  --brand-ink: #ffffff;
+  --brand-soft: #e2efe8;
+  --gold: #a9782a;
+  --present: #1f7a4d;
+  --present-soft: #dcf1e5;
+  --absent: #b3372f;
+  --absent-soft: #f8e1df;
+  --leave: #8a6412;
+  --leave-soft: #f6ebcf;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1613;
+    --surface: #17211c;
+    --ink: #e8f0eb;
+    --muted: #9db0a5;
+    --line: #2a3a32;
+    --brand: #3f9c7a;
+    --brand-ink: #08140f;
+    --brand-soft: #1d3329;
+    --gold: #d6a651;
+    --present: #5fd09a;
+    --present-soft: #1a3a2b;
+    --absent: #ef8a83;
+    --absent-soft: #3d2220;
+    --leave: #e3bf6a;
+    --leave-soft: #3a2f16;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1613;
+  --surface: #17211c;
+  --ink: #e8f0eb;
+  --muted: #9db0a5;
+  --line: #2a3a32;
+  --brand: #3f9c7a;
+  --brand-ink: #08140f;
+  --brand-soft: #1d3329;
+  --gold: #d6a651;
+  --present: #5fd09a;
+  --present-soft: #1a3a2b;
+  --absent: #ef8a83;
+  --absent-soft: #3d2220;
+  --leave: #e3bf6a;
+  --leave-soft: #3a2f16;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Hind Siliguri", "Noto Sans Bengali", "Kalpurush", system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  padding-top: env(safe-area-inset-top, 0px);
+  -webkit-text-size-adjust: 100%;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+h1, h2, h3 { margin: 0; line-height: 1.3; }
+
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 12px 16px;
+  background: var(--brand); color: var(--brand-ink);
+}
+.topbar h1 { font-size: 19px; font-weight: 700; }
+.topbar .who { font-size: 13px; opacity: .85; }
+.topbar button {
+  background: transparent; border: 1px solid currentColor; color: inherit;
+  border-radius: 8px; padding: 6px 12px; cursor: pointer; font-size: 14px;
+}
+
+main { padding: 16px 16px 96px; max-width: 640px; margin: 0 auto; }
+
+.nav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+  display: flex; background: var(--surface); border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.nav button {
+  flex: 1; border: 0; background: none; padding: 12px 4px; cursor: pointer;
+  font-size: 14px; font-weight: 500; color: var(--muted);
+  border-top: 3px solid transparent;
+}
+.nav button[aria-current="true"] { color: var(--brand); border-top-color: var(--brand); font-weight: 700; }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+.panel h2 { font-size: 17px; margin-bottom: 12px; }
+
+label { display: block; font-size: 14px; font-weight: 500; margin: 12px 0 4px; color: var(--muted); }
+input, select, textarea {
+  width: 100%; padding: 11px 12px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--bg); min-height: 44px;
+}
+input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+
+.btn {
+  display: inline-block; border: 0; border-radius: 10px; cursor: pointer;
+  background: var(--brand); color: var(--brand-ink);
+  padding: 12px 18px; font-weight: 600; min-height: 46px;
+}
+.btn.block { width: 100%; margin-top: 16px; }
+.btn.ghost { background: transparent; color: var(--brand); border: 1px solid var(--brand); }
+.btn.small { padding: 6px 12px; min-height: 36px; font-size: 14px; }
+.btn:disabled { opacity: .5; cursor: default; }
+
+.row { display: flex; gap: 10px; }
+.row > * { flex: 1; }
+
+.list { list-style: none; margin: 0; padding: 0; }
+.list li { padding: 12px 0; border-bottom: 1px solid var(--line); }
+.list li:last-child { border-bottom: 0; }
+.item-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.item-name { font-weight: 600; }
+.meta { font-size: 14px; color: var(--muted); }
+.tag {
+  display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 99px;
+  background: var(--brand-soft); color: var(--brand); font-weight: 600;
+}
+.tag.off { background: var(--absent-soft); color: var(--absent); }
+
+.marks { display: flex; gap: 6px; margin-top: 8px; }
+.marks button {
+  flex: 1; padding: 9px 4px; border-radius: 8px; border: 1px solid var(--line);
+  background: var(--bg); cursor: pointer; font-size: 14px; font-weight: 500; min-height: 42px;
+}
+.marks button[data-s="present"][aria-pressed="true"] { background: var(--present-soft); border-color: var(--present); color: var(--present); font-weight: 700; }
+.marks button[data-s="absent"][aria-pressed="true"] { background: var(--absent-soft); border-color: var(--absent); color: var(--absent); font-weight: 700; }
+.marks button[data-s="leave"][aria-pressed="true"] { background: var(--leave-soft); border-color: var(--leave); color: var(--leave); font-weight: 700; }
+
+.summary { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; font-size: 14px; }
+.summary span { padding: 3px 10px; border-radius: 99px; font-weight: 600; }
+.summary .p { background: var(--present-soft); color: var(--present); }
+.summary .a { background: var(--absent-soft); color: var(--absent); }
+.summary .l { background: var(--leave-soft); color: var(--leave); }
+.summary .u { background: var(--brand-soft); color: var(--muted); }
+
+.empty { text-align: center; color: var(--muted); padding: 24px 8px; }
+.note { font-size: 14px; color: var(--muted); }
+
+.auth { max-width: 400px; margin: 0 auto; padding: 48px 20px; }
+.auth h1 { font-size: 26px; color: var(--brand); margin-bottom: 4px; }
+.auth p { margin: 0 0 20px; color: var(--muted); }
+
+.toast {
+  position: fixed; left: 16px; right: 16px; bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  max-width: 420px; margin: 0 auto; z-index: 20;
+  background: var(--ink); color: var(--bg); padding: 12px 16px; border-radius: 10px; font-size: 15px;
+}
+.toast.err { background: var(--absent); color: #fff; }
+.toast[hidden] { display: none; }
+
+details.panel summary { cursor: pointer; font-weight: 600; font-size: 17px; }
+details.panel[open] summary { margin-bottom: 4px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn, .marks button { transition: background .15s, border-color .15s; }
+}
+textarea { min-height: 120px; resize: vertical; }
+.prewrap { white-space: pre-wrap; }
+
+/* ===== Glass login ===== */
+.gl-wrap {
+  position: fixed; inset: 0; overflow-y: auto; overflow-x: hidden; isolation: isolate;
+  background: linear-gradient(150deg, #06392b 0%, #0b6b5c 42%, #1d3f8f 100%);
+  color: #fff;
+}
+.gl-pattern {
+  position: absolute; inset: 0; z-index: 0; opacity: .11; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='white' stroke-width='1.2'%3E%3Crect x='20' y='20' width='40' height='40'/%3E%3Crect x='20' y='20' width='40' height='40' transform='rotate(45 40 40)'/%3E%3Ccircle cx='40' cy='40' r='9'/%3E%3C/g%3E%3C/svg%3E");
+}
+.gl-orb { position: absolute; z-index: 0; border-radius: 50%; filter: blur(64px); opacity: .55; pointer-events: none; }
+.gl-orb.o1 { width: 280px; height: 280px; background: #f5b942; top: -80px; right: -90px; }
+.gl-orb.o2 { width: 300px; height: 300px; background: #ff6b8b; bottom: -110px; left: -100px; opacity: .42; }
+.gl-orb.o3 { width: 240px; height: 240px; background: #22d3ee; top: 42%; right: -120px; opacity: .4; }
+@media (prefers-reduced-motion: no-preference) {
+  .gl-orb { animation: glFloat 14s ease-in-out infinite alternate; }
+  .gl-orb.o2 { animation-duration: 18s; }
+  .gl-orb.o3 { animation-duration: 16s; }
+  @keyframes glFloat { from { transform: translate(0, 0) scale(1); } to { transform: translate(-24px, 30px) scale(1.12); } }
+}
+.gl-inner {
+  position: relative; z-index: 1; max-width: 420px; margin: 0 auto; min-height: 100%;
+  padding: calc(env(safe-area-inset-top, 0px) + 32px) 20px calc(env(safe-area-inset-bottom, 0px) + 28px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+}
+.gl-wrap svg { width: 20px; height: 20px; flex: none; }
+.gl-logo {
+  width: 84px; height: 84px; border-radius: 26px; display: grid; place-items: center; color: #ffd873;
+  background: linear-gradient(145deg, rgba(255,255,255,.30), rgba(255,255,255,.08));
+  border: 1px solid rgba(255,255,255,.42);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  box-shadow: 0 14px 34px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.55);
+}
+.gl-wrap .gl-logo svg { width: 46px; height: 46px; stroke-width: 1.5; }
+.gl-title { font-size: 28px; font-weight: 700; margin-top: 18px; text-shadow: 0 2px 14px rgba(0,0,0,.3); }
+.gl-sub { margin: 6px 0 0; font-size: 15px; color: rgba(255,255,255,.86); }
+.gl-card {
+  width: 100%; margin-top: 22px; padding: 16px 18px 22px; text-align: left; border-radius: 26px;
+  background: linear-gradient(160deg, rgba(255,255,255,.20), rgba(255,255,255,.06)), rgba(6,40,31,.28);
+  border: 1px solid rgba(255,255,255,.30);
+  -webkit-backdrop-filter: blur(22px) saturate(160%); backdrop-filter: blur(22px) saturate(160%);
+  box-shadow: 0 24px 60px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.45);
+}
+.gl-seg { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 14px; background: rgba(0,0,0,.22); }
+.gl-seg button {
+  border: 0; background: transparent; color: rgba(255,255,255,.78); border-radius: 10px;
+  padding: 10px 6px; font-weight: 600; font-size: 15px; cursor: pointer;
+}
+.gl-seg button[aria-selected="true"] {
+  background: rgba(255,255,255,.24); color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 4px 12px rgba(0,0,0,.18);
+}
+.gl-label { display: block; font-size: 13.5px; font-weight: 500; color: rgba(255,255,255,.88); margin: 14px 0 6px; }
+.gl-field {
+  display: flex; align-items: center; gap: 10px; padding: 0 12px; min-height: 50px; border-radius: 14px;
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.30); color: rgba(255,255,255,.85);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
+.gl-field:focus-within { border-color: #ffd873; box-shadow: 0 0 0 3px rgba(255,216,115,.28); }
+.gl-field input {
+  flex: 1; min-width: 0; width: auto; min-height: 48px; padding: 0; border: 0; border-radius: 0;
+  background: transparent; color: #fff; font-size: 16px;
+}
+.gl-field input:focus { outline: none; box-shadow: none; }
+.gl-field input::placeholder { color: rgba(255,255,255,.55); }
+.gl-field input:-webkit-autofill {
+  -webkit-text-fill-color: #fff; caret-color: #fff; transition: background-color 99999s;
+  box-shadow: 0 0 0 1000px rgba(16,86,68,.95) inset;
+}
+.gl-eye { border: 0; background: none; color: #fff; opacity: .85; padding: 8px; margin-right: -6px; cursor: pointer; display: grid; }
+.gl-go {
+  width: 100%; margin-top: 22px; min-height: 52px; border: 0; border-radius: 14px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  font-weight: 700; font-size: 17px; color: #0b3d2e;
+  background: linear-gradient(135deg, #ffe08a, #f5b942 55%, #f59e0b);
+  box-shadow: 0 10px 26px rgba(245,158,11,.38), inset 0 1px 0 rgba(255,255,255,.65);
+}
+.gl-go:active { transform: scale(.985); }
+.gl-go:disabled { opacity: .6; cursor: default; }
+.gl-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 22px; }
+.gl-chips span {
+  display: inline-flex; align-items: center; gap: 6px; padding: 8px 13px; border-radius: 99px; font-size: 13.5px;
+  background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.26);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+.gl-chips svg { width: 16px !important; height: 16px !important; color: #ffd873; }
+.gl-wrap button:focus-visible { outline: 2px solid #ffd873; outline-offset: 2px; }
+.topbar .tb { display: flex; gap: 8px; align-items: center; }
+.topbar #chpw { display: grid; place-items: center; padding: 6px 9px; }
+.topbar svg { width: 18px; height: 18px; }
+.modal { position: fixed; inset: 0; z-index: 15; background: rgba(0,0,0,.55); display: grid; place-items: center; padding: 16px; }
+.modal-box { width: 100%; max-width: 400px; margin: 0 !important; }
+.av { display: grid; place-items: center; border-radius: 50%; object-fit: cover; background: var(--brand-soft); color: var(--brand); font-weight: 600; border: 2px solid rgba(255,255,255,.85); overflow: hidden; }
+.topbar #avbtn { border: 0; padding: 0; background: none; border-radius: 50%; line-height: 0; }
+.modal svg { width: 20px; height: 20px; }
+.modal-box { max-height: 92vh; overflow-y: auto; }
+.nav button { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.nav .ni { width: 36px; height: 28px; border-radius: 9px; display: grid; place-items: center; border: 1px solid var(--line); background: var(--bg); }
+.nav .ni svg { width: 18px; height: 18px; }
+.nav button[aria-current="true"] .ni { border-color: var(--brand); color: var(--brand); }
+.urow { display: flex; align-items: center; gap: 10px; width: 100%; background: none; border: 0; padding: 0; text-align: left; cursor: pointer; color: inherit; min-height: 48px; }
+.urow svg { width: 18px; height: 18px; flex: none; color: var(--muted); }
+.ubody { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast" class="toast" hidden role="status"></div>
+
+<script>
+const SUPABASE_URL = "https://rfkckvghaxfpbkpbewvl.supabase.co";
+const SUPABASE_KEY = "sb_publishable_l963B-BHA5mtqV-YwVBAvQ_Agf0Y5jq";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const ROLE_BN = { admin: "অ্যাডমিন", teacher: "শিক্ষক", accountant: "হিসাবরক্ষক", member: "সদস্য" };
+const STATUS_BN = { present: "উপস্থিত", absent: "অনুপস্থিত", leave: "ছুটি" };
+
+const state = {
+  session: null,
+  profile: null,
+  classes: [],
+  students: [],
+  tab: "attendance",
+  att: { classId: "", date: todayStr(), rows: [], marks: {} },
+  stu: { classId: "", q: "" }
+};
+
+const $ = (s) => document.querySelector(s);
+const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const bn = (n) => Number(n).toLocaleString("bn-BD");
+const isAdmin = () => state.profile && state.profile.role === "admin";
+const isStaff = () => state.profile && ["admin", "teacher", "accountant"].includes(state.profile.role);
+
+function todayStr() {
+  const d = new Date();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${m}-${day}`;
+}
+
+let toastTimer;
+function toast(msg, isErr) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.className = "toast" + (isErr ? " err" : "");
+  t.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.hidden = true; }, 3200);
+}
+
+function niceError(e) {
+  const m = (e && e.message) || "";
+  if (/Invalid login credentials/i.test(m)) return "ইমেইল বা পাসওয়ার্ড ভুল।";
+  if (/duplicate key/i.test(m)) return "এই তথ্য আগে থেকেই আছে।";
+  if (/already registered|already been registered|user_already_exists/i.test(m)) return "এই নম্বর বা ইমেইলে আগেই আইডি খোলা আছে। লগইন করুন।";
+  if (/email rate limit/i.test(m)) return "ইমেইল পাঠানোর সীমা শেষ। অ্যাডমিনকে জানান, ইমেইল যাচাই বন্ধ করতে হবে।";
+  if (/rate limit|too many|security purposes/i.test(m)) return "অনেকবার চেষ্টা করা হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন। (" + m + ")";
+  if (/invalid.*email|email.*invalid/i.test(m)) return "ফোন নম্বর বা ইমেইলটি সঠিক নয়।";
+  if (/Could not find the function|schema cache|Bucket not found/i.test(m)) return "ডাটাবেসে নতুন সেটআপ বাকি আছে। অ্যাডমিনকে জানান।";
+  if (/different from the old password/i.test(m)) return "নতুন পাসওয়ার্ড আগেরটার থেকে আলাদা হতে হবে।";
+  if (/not allowed/i.test(m)) return "এই কাজের অনুমতি আপনার নেই।";
+  if (/row-level security/i.test(m)) return "এই কাজের অনুমতি আপনার নেই।";
+  if (/Failed to fetch|NetworkError/i.test(m)) return "ইন্টারনেট সংযোগ পাওয়া যাচ্ছে না।";
+  return m || "কিছু একটা ভুল হয়েছে।";
+}
+
+/* ---------- Start ---------- */
+async function init() {
+  const { data } = await sb.auth.getSession();
+  state.session = data.session;
+  sb.auth.onAuthStateChange((_evt, session) => {
+    const changed = (session && session.user.id) !== (state.session && state.session.user.id);
+    state.session = session;
+    if (changed) start();
+  });
+  start();
+}
+
+async function start() {
+  if (!state.session) { state.profile = null; return renderAuth(); }
+  $("#app").innerHTML = '<p class="empty">লোড হচ্ছে…</p>';
+  let { data, error } = await sb.from("profiles").select("role, full_name, phone, avatar_url").eq("id", state.session.user.id).single();
+  if (error) ({ data, error } = await sb.from("profiles").select("role, full_name").eq("id", state.session.user.id).single());
+  if (error) { toast(niceError(error), true); }
+  state.profile = data || { role: "member", full_name: "" };
+  state.tab = isStaff() ? "attendance" : "info";
+  if (isStaff()) await loadBase();
+  renderShell();
+}
+
+async function loadBase() {
+  const [c, s] = await Promise.all([
+    sb.from("classes").select("id, name").order("name"),
+    sb.from("students").select("id, name, father_name, class_id, roll_no, guardian_phone, status, residence").order("roll_no", { ascending: true, nullsFirst: false }).order("name")
+  ]);
+  if (c.error) toast(niceError(c.error), true);
+  if (s.error) toast(niceError(s.error), true);
+  state.classes = c.data || [];
+  state.students = s.data || [];
+}
+
+/* ---------- Login / Sign-up ---------- */
+let authMode = "login";
+const FAKE_DOMAIN = "@phone.madrasa.app";
+const shownId = () => ((state.session && state.session.user.email) || "").replace(FAKE_DOMAIN, "");
+
+function toEmail(raw) {
+  const v = raw.trim();
+  if (v.includes("@")) return v;
+  const digits = v.replace(/[০-৯]/g, (d) => "০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/[^0-9]/g, "");
+  return digits ? digits + FAKE_DOMAIN : "";
+}
+
+const ICON_P = {
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>',
+  phone: '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>',
+  lock: '<rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  eye: '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  eyeOff: '<path d="M3 3l18 18"/><path d="M10.6 6.1A10 10 0 0 1 12 6c6.4 0 10 6 10 6a17 17 0 0 1-3.2 3.9M6.5 7.6C3.9 9.3 2 12 2 12s3.6 6 10 6c1.5 0 2.9-.3 4.1-.8"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
+  clip: '<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="M9 13l2 2 4-4"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/>',
+  shield: '<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/>',
+  chevron: '<path d="M9 6l6 6-6 6"/>',
+  camera: '<path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/>',
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  key: '<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/>',
+  book: '<path d="M2 5c3-1.3 6-1.3 10 1 4-2.3 7-2.3 10-1v14c-3-1.3-6-1.3-10 1-4-2.3-7-2.3-10-1z"/><path d="M12 6v14"/>',
+  wallet: '<path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16.5" cy="14.5" r="1.2"/>',
+  users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.4c2.2.7 3.5 2.6 3.5 5.6"/>',
+  dome: '<path d="M12 2.5v2.5"/><path d="M5 20v-6a7 7 0 0 1 14 0v6"/><path d="M3 20h18"/><path d="M9.5 20v-3.5a2.5 2.5 0 0 1 5 0V20"/>'
+};
+const ico = (n) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON_P[n]}</svg>`;
+
+function renderAuth() {
+  const su = authMode === "signup";
+  const fld = (id, label, icon, attrs, extra) =>
+    `<label class="gl-label" for="${id}">${label}</label><div class="gl-field">${ico(icon)}<input id="${id}" ${attrs}>${extra || ""}</div>`;
+  $("#app").innerHTML = `
+    <div class="gl-wrap">
+      <div class="gl-orb o1"></div><div class="gl-orb o2"></div><div class="gl-orb o3"></div>
+      <div class="gl-pattern"></div>
+      <div class="gl-inner">
+        <div class="gl-logo">${ico("dome")}</div>
+        <h1 class="gl-title">মাদরাসা ব্যবস্থাপনা</h1>
+        <p class="gl-sub">${su ? "নতুন আইডি খুলে মাদরাসার সব তথ্য এক জায়গায় দেখুন" : "স্বাগতম! আপনার আইডি দিয়ে প্রবেশ করুন"}</p>
+        <div class="gl-card">
+          <div class="gl-seg" role="tablist">
+            <button role="tab" aria-selected="${!su}" data-m="login">লগইন</button>
+            <button role="tab" aria-selected="${su}" data-m="signup">নতুন আইডি</button>
+          </div>
+          ${su ? fld("nm", "আপনার নাম", "user", 'autocomplete="name" placeholder="পূর্ণ নাম"') : ""}
+          ${fld("idv", "ফোন নম্বর বা ইমেইল", "phone", `autocomplete="username" inputmode="email" placeholder="01XXXXXXXXX"`)}
+          ${fld("pw", "পাসওয়ার্ড", "lock", `type="password" autocomplete="${su ? "new-password" : "current-password"}" placeholder="${su ? "অন্তত ৬ অক্ষর" : "পাসওয়ার্ড লিখুন"}"`,
+            `<button type="button" class="gl-eye" id="eye" aria-label="পাসওয়ার্ড দেখান">${ico("eye")}</button>`)}
+          <button class="gl-go" id="loginBtn">${su ? "আইডি খুলুন" : "লগইন করুন"}${ico("arrow")}</button>
+        </div>
+        <div class="gl-chips">
+          <span>${ico("book")}নিয়মকানুন</span><span>${ico("wallet")}ফি ও বেতন</span><span>${ico("users")}ছাত্র সংখ্যা</span>
+        </div>
+      </div>
+    </div>`;
+
+  document.querySelectorAll(".gl-seg button").forEach((b) => {
+    b.onclick = () => { if (b.dataset.m !== authMode) { authMode = b.dataset.m; renderAuth(); } };
+  });
+  $("#eye").onclick = () => {
+    const inp = $("#pw");
+    const show = inp.type === "password";
+    inp.type = show ? "text" : "password";
+    $("#eye").innerHTML = ico(show ? "eyeOff" : "eye");
+    $("#eye").setAttribute("aria-label", show ? "পাসওয়ার্ড লুকান" : "পাসওয়ার্ড দেখান");
+  };
+
+  const go = async () => {
+    const raw = $("#idv").value;
+    const email = toEmail(raw);
+    const password = $("#pw").value;
+    if (!email) return toast("সঠিক ফোন নম্বর বা ইমেইল দিন।", true);
+    if (!password) return toast("পাসওয়ার্ড দিন।", true);
+    const btn = $("#loginBtn");
+    const label = btn.innerHTML;
+    const reset = () => { btn.disabled = false; btn.innerHTML = label; };
+    btn.disabled = true; btn.textContent = "অপেক্ষা করুন…";
+    let res;
+    if (su) {
+      const name = $("#nm").value.trim();
+      if (!name) { reset(); return toast("আপনার নাম লিখুন।", true); }
+      if (password.length < 6) { reset(); return toast("পাসওয়ার্ড অন্তত ৬ অক্ষরের দিন।", true); }
+      const phone = raw.includes("@") ? null : email.replace(FAKE_DOMAIN, "");
+      res = await sb.auth.signUp({ email, password, options: { data: { full_name: name, phone } } });
+      if (!res.error && !res.data.session) {
+        reset();
+        return toast(email.endsWith(FAKE_DOMAIN)
+          ? "আইডি খোলা হয়েছে, কিন্তু ইমেইল যাচাই চালু থাকায় লগইন হচ্ছে না। অ্যাডমিনকে জানান।"
+          : "যাচাইয়ের ইমেইল পাঠানো হয়েছে। লিংকে চাপ দিয়ে তারপর লগইন করুন।");
+      }
+    } else {
+      res = await sb.auth.signInWithPassword({ email, password });
+    }
+    if (res.error) { reset(); toast(niceError(res.error), true); }
+  };
+  $("#loginBtn").onclick = go;
+  $("#pw").addEventListener("keydown", (e) => { if (e.key === "Enter") go(); });
+}
+
+/* ---------- Shell ---------- */
+function renderShell() {
+  const p = state.profile;
+  $("#app").innerHTML = `
+    <header class="topbar">
+      <div>
+        <h1>মাদরাসা ব্যবস্থাপনা</h1>
+        <div class="who" id="whoLine">${esc(p.full_name || shownId())} (${esc(ROLE_BN[p.role] || p.role)})</div>
+      </div>
+      <div class="tb"><button id="avbtn" aria-label="প্রোফাইল">${avatarHtml(p, 38)}</button></div>
+    </header>
+    <main id="main"></main>
+    <nav class="nav">${tabsHtml()}</nav>`;
+  $("#avbtn").onclick = showProfile;
+  document.querySelectorAll(".nav button").forEach((b) => {
+    b.onclick = () => { state.tab = b.dataset.tab; showTab(); };
+  });
+  showTab();
+}
+
+function showTab() {
+  document.querySelectorAll(".nav button").forEach((b) => b.setAttribute("aria-current", b.dataset.tab === state.tab ? "true" : "false"));
+  if (state.tab === "info" || !isStaff()) return viewInfo();
+  if (state.tab === "attendance") return viewAttendance();
+  if (state.tab === "students") return viewStudents();
+  if (state.tab === "users" && isAdmin()) return viewUsers();
+  return viewClasses();
+}
+
+const classOptions = (selected, placeholder) =>
+  `<option value="">${esc(placeholder)}</option>` +
+  state.classes.map((c) => `<option value="${c.id}" ${String(c.id) === String(selected) ? "selected" : ""}>${esc(c.name)}</option>`).join("");
+
+/* ---------- Attendance ---------- */
+async function loadAttendance() {
+  const a = state.att;
+  if (!a.classId) { a.rows = []; a.marks = {}; return; }
+  a.rows = state.students.filter((s) => String(s.class_id) === String(a.classId) && s.status === "active");
+  a.marks = {};
+  const ids = a.rows.map((s) => s.id);
+  if (ids.length) {
+    const { data, error } = await sb.from("attendance").select("student_id, status").eq("date", a.date).in("student_id", ids);
+    if (error) toast(niceError(error), true);
+    (data || []).forEach((r) => { a.marks[r.student_id] = r.status; });
+  }
+}
+
+function attRowsHtml() {
+  const a = state.att;
+  if (!a.classId) return '<p class="empty">হাজিরা নিতে একটি ক্লাস বেছে নিন।</p>';
+  if (!a.rows.length) return '<p class="empty">এই ক্লাসে কোনো সক্রিয় শিক্ষার্থী নেই। আগে "শিক্ষার্থী" ট্যাবে যোগ করুন।</p>';
+  const count = { present: 0, absent: 0, leave: 0 };
+  a.rows.forEach((s) => { if (a.marks[s.id]) count[a.marks[s.id]]++; });
+  const un = a.rows.length - count.present - count.absent - count.leave;
+  const items = a.rows.map((s) => `
+    <li data-id="${s.id}">
+      <div class="item-top">
+        <span class="item-name">${s.roll_no ? bn(s.roll_no) + ". " : ""}${esc(s.name)}</span>
+      </div>
+      <div class="marks">
+        ${["present", "absent", "leave"].map((k) => `<button data-s="${k}" aria-pressed="${a.marks[s.id] === k}">${STATUS_BN[k]}</button>`).join("")}
+      </div>
+    </li>`).join("");
+  return `
+    <div class="summary">
+      <span class="p">উপস্থিত ${bn(count.present)}</span>
+      <span class="a">অনুপস্থিত ${bn(count.absent)}</span>
+      <span class="l">ছুটি ${bn(count.leave)}</span>
+      <span class="u">বাকি ${bn(un)}</span>
+    </div>
+    <div class="row" style="margin-bottom:8px">
+      <button class="btn ghost small" id="allPresent">সবাইকে উপস্থিত করুন</button>
+    </div>
+    <ul class="list">${items}</ul>
+    <button class="btn block" id="saveAtt">হাজিরা সংরক্ষণ করুন</button>`;
+}
+
+async function viewAttendance() {
+  $("#main").innerHTML = `
+    <div class="panel">
+      <h2>দৈনিক হাজিরা</h2>
+      <div class="row">
+        <div><label for="aCls">ক্লাস</label><select id="aCls">${classOptions(state.att.classId, "ক্লাস বেছে নিন")}</select></div>
+        <div><label for="aDate">তারিখ</label><input id="aDate" type="date" value="${state.att.date}"></div>
+      </div>
+    </div>
+    <div class="panel" id="attBody"><p class="empty">লোড হচ্ছে…</p></div>`;
+  $("#aCls").onchange = async (e) => { state.att.classId = e.target.value; await refreshAtt(); };
+  $("#aDate").onchange = async (e) => { state.att.date = e.target.value || todayStr(); await refreshAtt(); };
+  await refreshAtt();
+}
+
+async function refreshAtt() {
+  await loadAttendance();
+  paintAtt();
+}
+
+function paintAtt() {
+  const body = $("#attBody");
+  if (!body) return;
+  body.innerHTML = attRowsHtml();
+  body.querySelectorAll("li[data-id] .marks button").forEach((b) => {
+    b.onclick = () => {
+      const id = b.closest("li").dataset.id;
+      state.att.marks[id] = b.dataset.s;
+      paintAtt();
+    };
+  });
+  const all = $("#allPresent");
+  if (all) all.onclick = () => { state.att.rows.forEach((s) => { state.att.marks[s.id] = "present"; }); paintAtt(); };
+  const save = $("#saveAtt");
+  if (save) save.onclick = saveAttendance;
+}
+
+async function saveAttendance() {
+  const a = state.att;
+  const payload = a.rows.filter((s) => a.marks[s.id]).map((s) => ({ student_id: s.id, date: a.date, status: a.marks[s.id] }));
+  if (!payload.length) return toast("কারো হাজিরা বেছে নেওয়া হয়নি।", true);
+  const btn = $("#saveAtt");
+  btn.disabled = true; btn.textContent = "সংরক্ষণ হচ্ছে…";
+  const { error } = await sb.from("attendance").upsert(payload, { onConflict: "student_id,date" });
+  btn.disabled = false; btn.textContent = "হাজিরা সংরক্ষণ করুন";
+  if (error) return toast(niceError(error), true);
+  toast(`${bn(payload.length)} জনের হাজিরা সংরক্ষিত হয়েছে।`);
+}
+
+/* ---------- Students ---------- */
+function studentListHtml() {
+  const { classId, q } = state.stu;
+  const term = q.trim().toLowerCase();
+  const list = state.students.filter((s) =>
+    (!classId || String(s.class_id) === String(classId)) &&
+    (!term || (s.name || "").toLowerCase().includes(term) || (s.father_name || "").toLowerCase().includes(term))
+  );
+  if (!list.length) return '<p class="empty">কোনো শিক্ষার্থী পাওয়া যায়নি।</p>';
+  const cname = (id) => (state.classes.find((c) => c.id === id) || {}).name || "ক্লাস নেই";
+  return `<p class="note">মোট ${bn(list.length)} জন</p><ul class="list">` + list.map((s) => `
+    <li>
+      <div class="item-top">
+        <span class="item-name">${s.roll_no ? bn(s.roll_no) + ". " : ""}${esc(s.name)}</span>
+        <span class="tag ${s.status === "active" ? "" : "off"}">${s.status === "active" ? "সক্রিয়" : "বন্ধ"}</span>
+      </div>
+      <div class="meta">${esc(cname(s.class_id))}${s.father_name ? " · পিতা: " + esc(s.father_name) : ""}${s.residence === "resident" ? " · আবাসিক" : ""}</div>
+      ${s.guardian_phone ? `<div class="meta">অভিভাবক: <a href="tel:${esc(s.guardian_phone)}">${esc(s.guardian_phone)}</a></div>` : ""}
+      ${isAdmin() ? `<div style="margin-top:8px"><button class="btn ghost small" data-toggle="${s.id}" data-to="${s.status === "active" ? "inactive" : "active"}">${s.status === "active" ? "বন্ধ করুন" : "সক্রিয় করুন"}</button></div>` : ""}
+    </li>`).join("") + "</ul>";
+}
+
+function viewStudents() {
+  const addForm = isAdmin() ? `
+    <details class="panel">
+      <summary>নতুন শিক্ষার্থী যোগ করুন</summary>
+      <label for="sName">নাম *</label><input id="sName">
+      <label for="sFather">পিতার নাম</label><input id="sFather">
+      <div class="row">
+        <div><label for="sClass">ক্লাস *</label><select id="sClass">${classOptions("", "বেছে নিন")}</select></div>
+        <div><label for="sRoll">রোল নম্বর</label><input id="sRoll" type="number" min="1" inputmode="numeric"></div>
+      </div>
+      <label for="sPhone">অভিভাবকের ফোন</label><input id="sPhone" type="tel" inputmode="tel">
+      <label for="sRes">থাকার ধরন</label>
+      <select id="sRes"><option value="non_resident">অনাবাসিক</option><option value="resident">আবাসিক</option></select>
+      <button class="btn block" id="addStu">শিক্ষার্থী যোগ করুন</button>
+    </details>` : "";
+  $("#main").innerHTML = `
+    ${addForm}
+    <div class="panel">
+      <h2>শিক্ষার্থীর তালিকা</h2>
+      <div class="row">
+        <div><label for="fCls">ক্লাস</label><select id="fCls">${classOptions(state.stu.classId, "সব ক্লাস")}</select></div>
+        <div><label for="fQ">খুঁজুন</label><input id="fQ" type="search" placeholder="নাম লিখুন" value="${esc(state.stu.q)}"></div>
+      </div>
+      <div id="stuList" style="margin-top:8px"></div>
+    </div>`;
+  const paint = () => {
+    $("#stuList").innerHTML = studentListHtml();
+    document.querySelectorAll("[data-toggle]").forEach((b) => {
+      b.onclick = async () => {
+        const { error } = await sb.from("students").update({ status: b.dataset.to }).eq("id", b.dataset.toggle);
+        if (error) return toast(niceError(error), true);
+        await loadBase(); paint();
+      };
+    });
+  };
+  $("#fCls").onchange = (e) => { state.stu.classId = e.target.value; paint(); };
+  $("#fQ").oninput = (e) => { state.stu.q = e.target.value; paint(); };
+  paint();
+  const add = $("#addStu");
+  if (add) add.onclick = async () => {
+    const name = $("#sName").value.trim();
+    const classId = $("#sClass").value;
+    if (!name) return toast("শিক্ষার্থীর নাম লিখুন।", true);
+    if (!classId) return toast("একটি ক্লাস বেছে নিন।", true);
+    const roll = parseInt($("#sRoll").value, 10);
+    add.disabled = true;
+    const { error } = await sb.from("students").insert({
+      name,
+      father_name: $("#sFather").value.trim() || null,
+      class_id: Number(classId),
+      roll_no: Number.isFinite(roll) ? roll : null,
+      guardian_phone: $("#sPhone").value.trim() || null,
+      residence: $("#sRes").value
+    });
+    add.disabled = false;
+    if (error) return toast(niceError(error), true);
+    toast(`${name} যোগ করা হয়েছে।`);
+    await loadBase();
+    viewStudents();
+  };
+}
+
+/* ---------- Classes ---------- */
+function viewClasses() {
+  const count = (id) => state.students.filter((s) => s.class_id === id && s.status === "active").length;
+  const addForm = isAdmin() ? `
+    <div class="panel">
+      <h2>নতুন ক্লাস</h2>
+      <label for="cName">ক্লাসের নাম</label>
+      <input id="cName" placeholder="যেমন: হিফজ, নাযেরা, মিজান">
+      <button class="btn block" id="addCls">ক্লাস যোগ করুন</button>
+    </div>` : "";
+  $("#main").innerHTML = `
+    ${addForm}
+    <div class="panel">
+      <h2>সব ক্লাস</h2>
+      ${state.classes.length
+        ? `<ul class="list">${state.classes.map((c) => `
+            <li><div class="item-top"><span class="item-name">${esc(c.name)}</span><span class="meta">${bn(count(c.id))} জন শিক্ষার্থী</span></div></li>`).join("")}</ul>`
+        : '<p class="empty">এখনো কোনো ক্লাস নেই।' + (isAdmin() ? " উপরে প্রথম ক্লাসটি যোগ করুন।" : "") + "</p>"}
+    </div>`;
+  const add = $("#addCls");
+  if (add) add.onclick = async () => {
+    const name = $("#cName").value.trim();
+    if (!name) return toast("ক্লাসের নাম লিখুন।", true);
+    add.disabled = true;
+    const { error } = await sb.from("classes").insert({ name });
+    add.disabled = false;
+    if (error) return toast(niceError(error), true);
+    toast(`"${name}" ক্লাস যোগ করা হয়েছে।`);
+    await loadBase();
+    viewClasses();
+  };
+}
+
+/* ---------- Tabs ---------- */
+function tabsHtml() {
+  const t = [];
+  if (isStaff()) t.push(["attendance", "হাজিরা"], ["students", "শিক্ষার্থী"], ["classes", "ক্লাস"]);
+  t.push(["info", "তথ্য"]);
+  if (isAdmin()) t.push(["users", "ব্যবহারকারী"]);
+  const TI = { attendance: "clip", students: "users", classes: "book", info: "info", users: "shield" };
+  return t.map(([k, l]) => `<button data-tab="${k}"><span class="ni">${ico(TI[k])}</span>${l}</button>`).join("");
+}
+
+/* ---------- Madrasa info ---------- */
+const INFO_KEYS = [
+  ["rules", "মাদরাসার নিয়মকানুন"],
+  ["admission", "ভর্তি ফি"],
+  ["monthly", "মাসিক বেতন"],
+  ["boarding", "আবাসিক চাঁদা"]
+];
+
+async function viewInfo() {
+  $("#main").innerHTML = '<p class="empty">লোড হচ্ছে…</p>';
+  const [inf, cnt] = await Promise.all([
+    sb.from("madrasa_info").select("key, body"),
+    sb.rpc("class_counts")
+  ]);
+  if (inf.error) toast(niceError(inf.error), true);
+  if (cnt.error) toast(niceError(cnt.error), true);
+  const bodies = {};
+  (inf.data || []).forEach((r) => { bodies[r.key] = r.body || ""; });
+  const counts = cnt.data || [];
+  const total = counts.reduce((n, r) => n + Number(r.total), 0);
+
+  $("#main").innerHTML = INFO_KEYS.map(([k, title]) => `
+    <div class="panel" data-key="${k}">
+      <div class="item-top">
+        <h2 style="margin:0">${title}</h2>
+        ${isAdmin() ? '<button class="btn ghost small" data-edit>সম্পাদনা</button>' : ""}
+      </div>
+      <div class="view prewrap" style="margin-top:8px">${bodies[k] ? esc(bodies[k]) : '<span class="note">এখনো লেখা হয়নি।</span>'}</div>
+    </div>`).join("") + `
+    <div class="panel">
+      <h2>বিভাগভিত্তিক ছাত্র সংখ্যা</h2>
+      ${counts.length ? `<ul class="list">
+        ${counts.map((r) => `<li><div class="item-top"><span class="item-name">${esc(r.class_name)}</span><span class="meta">${bn(r.total)} জন</span></div></li>`).join("")}
+        <li><div class="item-top"><span class="item-name">মোট</span><span class="item-name">${bn(total)} জন</span></div></li>
+      </ul>` : '<p class="empty">এখনো কোনো বিভাগ নেই।</p>'}
+    </div>`;
+
+  document.querySelectorAll("[data-edit]").forEach((b) => {
+    b.onclick = () => {
+      const box = b.closest(".panel");
+      const k = box.dataset.key;
+      const view = box.querySelector(".view");
+      view.innerHTML = `<textarea aria-label="লিখুন">${esc(bodies[k] || "")}</textarea>
+        <div class="row" style="margin-top:8px"><button class="btn small" data-savei>সংরক্ষণ</button><button class="btn ghost small" data-cancel>বাতিল</button></div>`;
+      b.hidden = true;
+      view.querySelector("[data-cancel]").onclick = () => viewInfo();
+      view.querySelector("[data-savei]").onclick = async () => {
+        const body = view.querySelector("textarea").value.trim();
+        const { error } = await sb.from("madrasa_info").upsert({ key: k, body }, { onConflict: "key" });
+        if (error) return toast(niceError(error), true);
+        toast("সংরক্ষিত হয়েছে।");
+        viewInfo();
+      };
+    };
+  });
+}
+
+/* ---------- Users (admin) ---------- */
+async function viewUsers() {
+  $("#main").innerHTML = '<p class="empty">লোড হচ্ছে…</p>';
+  let { data, error } = await sb.from("profiles").select("id, full_name, phone, role, created_at, avatar_url").order("created_at", { ascending: false });
+  if (error) ({ data, error } = await sb.from("profiles").select("id, full_name, phone, role, created_at").order("created_at", { ascending: false }));
+  if (error) { $("#main").innerHTML = ""; return toast(niceError(error), true); }
+  const me = state.session.user.id;
+  const rank = { admin: 0, accountant: 1, teacher: 2, member: 3 };
+  const list = (data || []).slice().sort((a, b) => (rank[a.role] ?? 9) - (rank[b.role] ?? 9));
+  $("#main").innerHTML = `
+    <div class="panel">
+      <h2>ব্যবহারকারী (${bn(list.length)} জন)</h2>
+      <p class="note">কারো নামে চাপলে তার প্রোফাইল খুলবে। সেখান থেকে ভূমিকা বদল ও পাসওয়ার্ড রিসেট করতে পারবেন।</p>
+      <ul class="list">
+        ${list.map((u) => `
+          <li><button class="urow" data-uid="${u.id}">
+            ${avatarHtml(u, 42)}
+            <span class="ubody"><span class="item-name">${esc(u.full_name || "নাম নেই")}${u.id === me ? " (আপনি)" : ""}</span>${u.phone ? `<span class="meta">${esc(u.phone)}</span>` : ""}</span>
+            <span class="tag">${esc(ROLE_BN[u.role] || u.role)}</span>${ico("chevron")}
+          </button></li>`).join("")}
+      </ul>
+    </div>`;
+  document.querySelectorAll("[data-uid]").forEach((b) => {
+    b.onclick = () => {
+      const u = list.find((x) => x.id === b.dataset.uid);
+      if (!u) return;
+      if (u.id === me) return showProfile();
+      showUserDetail(u);
+    };
+  });
+}
+
+function showUserDetail(u) {
+  const ov = document.createElement("div");
+  ov.className = "modal";
+  const joined = u.created_at ? new Date(u.created_at).toLocaleDateString("bn-BD") : "";
+  ov.innerHTML = `<div class="modal-box panel" role="dialog" aria-modal="true" aria-label="ব্যবহারকারীর প্রোফাইল">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:8px">
+      ${avatarHtml(u, 92)}
+      <div class="item-name" style="font-size:18px">${esc(u.full_name || "নাম নেই")}</div>
+      <span class="tag">${esc(ROLE_BN[u.role] || u.role)}</span>
+    </div>
+    <label for="udP">ফোন নম্বর</label><input id="udP" value="${esc(u.phone || "নেই")}" readonly>
+    <label for="udD">আইডি খোলার তারিখ</label><input id="udD" value="${esc(joined)}" readonly>
+    <label for="udRole">ভূমিকা</label>
+    <select id="udRole">${["member", "teacher", "accountant", "admin"].map((r) => `<option value="${r}" ${u.role === r ? "selected" : ""}>${ROLE_BN[r]}</option>`).join("")}</select>
+    <div class="row" style="margin-top:16px"><button class="btn" id="udSave">সংরক্ষণ</button><button class="btn ghost" id="udClose">বন্ধ করুন</button></div>
+    <button class="btn ghost small" id="udReset" style="margin-top:10px;width:100%">পাসওয়ার্ড রিসেট</button>
+  </div>`;
+  document.body.appendChild(ov);
+  const close = () => ov.remove();
+  ov.addEventListener("click", (e) => { if (e.target === ov) close(); });
+  $("#udClose").onclick = close;
+
+  $("#udSave").onclick = async () => {
+    const role = $("#udRole").value;
+    const btn = $("#udSave");
+    btn.disabled = true;
+    const { error } = await sb.from("profiles").update({ role }).eq("id", u.id);
+    btn.disabled = false;
+    if (error) return toast(niceError(error), true);
+    close();
+    toast("ভূমিকা সংরক্ষিত হয়েছে।");
+    viewUsers();
+  };
+
+  $("#udReset").onclick = async () => {
+    const pw = window.prompt((u.full_name || "এই ব্যবহারকারীর") + " এর নতুন পাসওয়ার্ড লিখুন (অন্তত ৬ অক্ষর):");
+    if (pw === null) return;
+    if (pw.length < 6) return toast("পাসওয়ার্ড অন্তত ৬ অক্ষরের দিন।", true);
+    const btn = $("#udReset");
+    btn.disabled = true;
+    const { error } = await sb.rpc("admin_set_password", { target: u.id, new_password: pw });
+    btn.disabled = false;
+    if (error) return toast(niceError(error), true);
+    toast("নতুন পাসওয়ার্ড বসানো হয়েছে। তাকে জানিয়ে দিন।");
+  };
+}
+
+function avatarHtml(p, size) {
+  const st = `width:${size}px;height:${size}px;font-size:${Math.round(size * 0.42)}px`;
+  if (p.avatar_url) return `<img class="av" style="${st}" src="${esc(p.avatar_url)}" alt="">`;
+  const ch = Array.from((p.full_name || shownId() || "?").trim())[0] || "?";
+  return `<span class="av" style="${st}">${esc(ch.toUpperCase())}</span>`;
+}
+
+function paintTopbar() {
+  const p = state.profile;
+  const b = $("#avbtn");
+  if (b) b.innerHTML = avatarHtml(p, 38);
+  const w = $("#whoLine");
+  if (w) w.textContent = (p.full_name || shownId()) + " (" + (ROLE_BN[p.role] || p.role) + ")";
+}
+
+function resizeImage(file, size) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const side = Math.min(img.width, img.height);
+      const sx = (img.width - side) / 2, sy = (img.height - side) / 2;
+      const c = document.createElement("canvas");
+      c.width = c.height = size;
+      c.getContext("2d").drawImage(img, sx, sy, side, side, 0, 0, size, size);
+      URL.revokeObjectURL(url);
+      c.toBlob((b) => (b ? resolve(b) : reject(new Error("ছবি প্রসেস করা যায়নি।"))), "image/jpeg", 0.85);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("ছবিটি খোলা যায়নি।")); };
+    img.src = url;
+  });
+}
+
+function showProfile() {
+  const p = state.profile;
+  const ov = document.createElement("div");
+  ov.className = "modal";
+  ov.innerHTML = `<div class="modal-box panel" role="dialog" aria-modal="true" aria-label="প্রোফাইল">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:8px">
+      <div style="position:relative;line-height:0">
+        <span id="pfAv">${avatarHtml(p, 92)}</span>
+        <button type="button" id="pfCam" class="btn small" aria-label="ছবি বদলান" style="position:absolute;right:-6px;bottom:-4px;border-radius:50%;width:36px;height:36px;padding:0;min-height:36px;display:grid;place-items:center">${ico("camera")}</button>
+      </div>
+      <input type="file" id="pfFile" accept="image/*" hidden>
+      <span class="tag">${esc(ROLE_BN[p.role] || p.role)}</span>
+    </div>
+    <label for="pfN">নাম</label><input id="pfN" value="${esc(p.full_name || "")}">
+    <label for="pfP">ফোন নম্বর</label><input id="pfP" type="tel" inputmode="tel" value="${esc(p.phone || "")}">
+    <label for="pfI">লগইন আইডি</label><input id="pfI" value="${esc(shownId())}" readonly>
+    <div class="row" style="margin-top:16px"><button class="btn" id="pfSave">সংরক্ষণ</button><button class="btn ghost" id="pfClose">বন্ধ করুন</button></div>
+    <div class="row" style="margin-top:10px"><button class="btn ghost small" id="pfPw">পাসওয়ার্ড বদল</button><button class="btn small" id="pfOut" style="background:var(--absent)">লগআউট</button></div>
+  </div>`;
+  document.body.appendChild(ov);
+  const close = () => ov.remove();
+  ov.addEventListener("click", (e) => { if (e.target === ov) close(); });
+  $("#pfClose").onclick = close;
+  $("#pfOut").onclick = () => { close(); sb.auth.signOut(); };
+  $("#pfPw").onclick = () => { close(); showPwDialog(); };
+  $("#pfCam").onclick = () => $("#pfFile").click();
+
+  $("#pfFile").onchange = async (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const cam = $("#pfCam");
+    cam.disabled = true;
+    try {
+      const blob = await resizeImage(f, 320);
+      const path = state.session.user.id + "/avatar.jpg";
+      const up = await sb.storage.from("avatars").upload(path, blob, { upsert: true, contentType: "image/jpeg" });
+      if (up.error) throw up.error;
+      const url = sb.storage.from("avatars").getPublicUrl(path).data.publicUrl + "?v=" + Date.now();
+      const { error } = await sb.rpc("update_my_profile", {
+        p_name: $("#pfN").value.trim() || state.profile.full_name || "",
+        p_phone: $("#pfP").value.trim() || null,
+        p_avatar: url
+      });
+      if (error) throw error;
+      state.profile.avatar_url = url;
+      $("#pfAv").innerHTML = avatarHtml(state.profile, 92);
+      paintTopbar();
+      toast("ছবি বদলানো হয়েছে।");
+    } catch (err) {
+      toast(niceError(err), true);
+    }
+    cam.disabled = false;
+    e.target.value = "";
+  };
+
+  $("#pfSave").onclick = async () => {
+    const name = $("#pfN").value.trim();
+    if (!name) return toast("নাম লিখুন।", true);
+    const phone = $("#pfP").value.trim() || null;
+    const { error } = await sb.rpc("update_my_profile", { p_name: name, p_phone: phone, p_avatar: null });
+    if (error) return toast(niceError(error), true);
+    state.profile.full_name = name;
+    state.profile.phone = phone;
+    paintTopbar();
+    close();
+    toast("প্রোফাইল সংরক্ষিত হয়েছে।");
+  };
+}
+
+function showPwDialog() {
+  const ov = document.createElement("div");
+  ov.className = "modal";
+  ov.innerHTML = `<div class="modal-box panel" role="dialog" aria-modal="true" aria-label="পাসওয়ার্ড বদল">
+    <h2>পাসওয়ার্ড বদল</h2>
+    <label for="np1">নতুন পাসওয়ার্ড</label><input id="np1" type="password" autocomplete="new-password">
+    <label for="np2">আবার লিখুন</label><input id="np2" type="password" autocomplete="new-password">
+    <div class="row" style="margin-top:16px"><button class="btn" id="npSave">সংরক্ষণ</button><button class="btn ghost" id="npCancel">বাতিল</button></div>
+  </div>`;
+  document.body.appendChild(ov);
+  const close = () => ov.remove();
+  ov.addEventListener("click", (e) => { if (e.target === ov) close(); });
+  $("#npCancel").onclick = close;
+  $("#npSave").onclick = async () => {
+    const a = $("#np1").value, b = $("#np2").value;
+    if (a.length < 6) return toast("পাসওয়ার্ড অন্তত ৬ অক্ষরের দিন।", true);
+    if (a !== b) return toast("দুটো পাসওয়ার্ড মেলেনি।", true);
+    const { error } = await sb.auth.updateUser({ password: a });
+    if (error) return toast(niceError(error), true);
+    close();
+    toast("পাসওয়ার্ড বদলে গেছে।");
+  };
+}
+
+init();
+</script>
+</body>
+</html>
