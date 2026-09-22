@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>হামিদুল উলুম মাদ্রাসা</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg1:#c9d49c; --bg2:#b7c583; --bg3:#a3b56c;
+  --header-glass:rgba(190,222,252,0.55);
+  --header-glass-border:rgba(255,255,255,0.75);
+  --btn-a:#7cc0f5; --btn-b:#2f6fb0;
+  --btn-a2:#94a6c9; --btn-b2:#4d6fa8;
+  --text-main:#122436; --text-soft:#3c5064; --text-invert:#f4f8fc;
+  --panel:rgba(255,255,255,0.4); --panel-border:rgba(255,255,255,0.65);
+  --card-shadow:0 10px 34px rgba(20,40,20,0.18);
+  --grad-headline:linear-gradient(100deg,#ff8fb3 0%,#c58bff 35%,#7fb2ff 65%,#ffd694 100%);
+  --overlay:rgba(10,20,15,0.55);
+  --danger:#d24a4a; --ok:#2e9e5b;
+}
+:root[data-theme="dark"]{
+  --bg1:#1c2a20; --bg2:#152018; --bg3:#0f1a13;
+  --header-glass:rgba(30,52,74,0.55);
+  --header-glass-border:rgba(255,255,255,0.15);
+  --btn-a:#3f7fb8; --btn-b:#16324d;
+  --btn-a2:#4a5a78; --btn-b2:#232f47;
+  --text-main:#eef4f9; --text-soft:#b9c6d1; --text-invert:#f4f8fc;
+  --panel:rgba(255,255,255,0.06); --panel-border:rgba(255,255,255,0.14);
+  --card-shadow:0 10px 34px rgba(0,0,0,0.4);
+  --grad-headline:linear-gradient(100deg,#ff9ecb 0%,#c9a6ff 35%,#8fc0ff 65%,#ffe29e 100%);
+  --overlay:rgba(0,0,0,0.65);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]):not([data-theme="dark"]){
+    --bg1:#1c2a20; --bg2:#152018; --bg3:#0f1a13;
+    --header-glass:rgba(30,52,74,0.55);
+    --header-glass-border:rgba(255,255,255,0.15);
+    --btn-a:#3f7fb8; --btn-b:#16324d;
+    --btn-a2:#4a5a78; --btn-b2:#232f47;
+    --text-main:#eef4f9; --text-soft:#b9c6d1; --text-invert:#f4f8fc;
+    --panel:rgba(255,255,255,0.06); --panel-border:rgba(255,255,255,0.14);
+    --card-shadow:0 10px 34px rgba(0,0,0,0.4);
+    --grad-headline:linear-gradient(100deg,#ff9ecb 0%,#c9a6ff 35%,#8fc0ff 65%,#ffe29e 100%);
+    --overlay:rgba(0,0,0,0.65);
+  }
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+body{
+  margin:0; min-height:100%;
+  font-family:'Hind Siliguri',sans-serif;
+  background:linear-gradient(160deg,var(--bg1) 0%, var(--bg2) 55%, var(--bg3) 100%);
+  color:var(--text-main);
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  transition:background .3s ease,color .3s ease;
+}
+.headline{
+  font-family:'Baloo Da 2',sans-serif;
+  background-image:var(--grad-headline);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,0.18));
+}
+.wrap{max-width:640px; margin:0 auto; padding:16px 16px 40px;}
+.topbar{display:flex; align-items:center; justify-content:space-between; padding:10px 4px 6px;}
+.logo-circle{
+  width:52px; height:52px; border-radius:50%; overflow:hidden;
+  background:var(--panel); border:2px solid var(--panel-border);
+  display:flex; align-items:center; justify-content:center; font-size:22px;
+  box-shadow:var(--card-shadow); flex-shrink:0; cursor:pointer;
+}
+.logo-circle img{width:100%; height:100%; object-fit:cover;}
+.iconbtn{
+  width:46px; height:46px; border-radius:16px; border:1px solid var(--panel-border);
+  background:var(--panel); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:var(--card-shadow);
+  color:var(--text-main);
+}
+.header-card{
+  margin-top:10px; border-radius:32px; padding:26px 20px 22px;
+  background:var(--header-glass); border:1px solid var(--header-glass-border);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  box-shadow:var(--card-shadow); text-align:center; position:relative;
+}
+.header-card h1{font-size:2rem; margin:2px 0 6px; line-height:1.15; font-weight:800;}
+.header-card .addr{color:var(--text-soft); font-weight:600; margin:0 0 16px; font-size:0.95rem;}
+.header-photo{
+  width:180px; height:180px; border-radius:50%; margin:0 auto; overflow:hidden;
+  border:6px solid rgba(255,255,255,0.85); box-shadow:0 10px 26px rgba(0,0,0,0.25);
+  background:#fff; display:flex; align-items:center; justify-content:center; font-size:60px;
+}
+.header-photo img{width:100%; height:100%; object-fit:cover;}
+.edit-fab{
+  position:absolute; top:14px; right:14px; background:rgba(255,255,255,0.55);
+  border:1px solid rgba(255,255,255,0.8); border-radius:14px; padding:8px 12px;
+  font-weight:700; font-size:0.8rem; cursor:pointer; color:var(--text-main);
+  backdrop-filter:blur(10px);
+}
+.grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:22px;}
+.glass-btn{
+  border-radius:26px; padding:22px 10px; text-align:center; cursor:pointer; border:none;
+  font-family:'Baloo Da 2',sans-serif; font-weight:700; font-size:1.05rem; color:var(--text-invert);
+  background:linear-gradient(135deg, var(--btn-a), var(--btn-b));
+  box-shadow:0 8px 20px rgba(20,50,80,0.28), inset 0 1px 1px rgba(255,255,255,0.5);
+  border:1px solid rgba(255,255,255,0.35);
+  backdrop-filter:blur(6px);
+  position:relative; overflow:hidden;
+}
+.glass-btn.alt{background:linear-gradient(135deg, var(--btn-a2), var(--btn-b2));}
+.glass-btn:active{transform:scale(0.97);}
+.glass-btn .sub{display:block; font-family:'Hind Siliguri',sans-serif; font-weight:600; font-size:0.72rem; opacity:0.85; margin-top:4px;}
+.screen{padding-top:8px;}
+.screen-head{display:flex; align-items:center; gap:10px; margin-bottom:14px;}
+.backbtn{
+  width:42px; height:42px; border-radius:14px; border:1px solid var(--panel-border);
+  background:var(--panel); backdrop-filter:blur(14px); display:flex; align-items:center; justify-content:center;
+  cursor:pointer; color:var(--text-main); flex-shrink:0; font-size:20px;
+}
+.screen-head h2{font-size:1.5rem; margin:0; font-weight:800;}
+.panel{
+  background:var(--panel); border:1px solid var(--panel-border); border-radius:22px;
+  padding:18px; backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+  box-shadow:var(--card-shadow); margin-bottom:14px;
+}
+label{display:block; font-weight:700; font-size:0.85rem; margin:12px 0 6px; color:var(--text-soft);}
+input[type=text],input[type=tel],input[type=number],input[type=date],textarea,select{
+  width:100%; padding:12px 14px; border-radius:14px; border:1px solid var(--panel-border);
+  background:rgba(255,255,255,0.55); font-family:inherit; font-size:1rem; color:#12242e;
+}
+:root[data-theme="dark"] input,:root[data-theme="dark"] textarea,:root[data-theme="dark"] select{
+  background:rgba(255,255,255,0.08); color:var(--text-main);
+}
+textarea{min-height:100px; resize:vertical;}
+.filebtn{
+  display:flex; align-items:center; gap:10px; padding:12px; border-radius:14px;
+  border:1.5px dashed var(--panel-border); background:rgba(255,255,255,0.25); cursor:pointer; margin-top:4px;
+}
+.filebtn img{width:56px; height:56px; object-fit:cover; border-radius:10px;}
+.btn{
+  width:100%; padding:14px; border-radius:16px; border:none; font-weight:700; font-size:1rem;
+  cursor:pointer; margin-top:16px; font-family:'Hind Siliguri',sans-serif;
+  background:linear-gradient(135deg,var(--btn-a),var(--btn-b)); color:var(--text-invert);
+  box-shadow:0 8px 18px rgba(20,50,80,0.25);
+}
+.btn.secondary{background:var(--panel); color:var(--text-main); border:1px solid var(--panel-border); box-shadow:none;}
+.btn.danger{background:linear-gradient(135deg,#e07575,#b83a3a);}
+.badge{display:inline-block; padding:5px 12px; border-radius:999px; font-weight:700; font-size:0.8rem;}
+.badge.paid{background:rgba(46,158,91,0.18); color:var(--ok);}
+.badge.unpaid{background:rgba(210,74,74,0.18); color:var(--danger);}
+.badge.pending{background:rgba(210,150,50,0.2); color:#b5791c;}
+.list-item{
+  display:flex; justify-content:space-between; align-items:center; gap:10px;
+  padding:14px; border-radius:16px; background:rgba(255,255,255,0.28); margin-bottom:10px;
+  border:1px solid var(--panel-border);
+}
+.list-item .meta{font-size:0.8rem; color:var(--text-soft); margin-top:2px;}
+.overlay{
+  position:fixed; inset:0; background:var(--overlay); backdrop-filter:blur(4px);
+  display:flex; align-items:flex-end; justify-content:center; z-index:50;
+}
+.sheet{
+  width:100%; max-width:640px; background:var(--panel); backdrop-filter:blur(24px);
+  border:1px solid var(--panel-border); border-top-left-radius:28px; border-top-right-radius:28px;
+  padding:22px 18px calc(24px + env(safe-area-inset-bottom,0px)); max-height:85vh; overflow-y:auto;
+  box-shadow:0 -10px 40px rgba(0,0,0,0.3);
+}
+.menu-panel{
+  position:fixed; top:0; right:0; height:100%; width:82%; max-width:340px; z-index:60;
+  background:var(--panel); backdrop-filter:blur(26px); border-left:1px solid var(--panel-border);
+  padding:calc(20px + env(safe-area-inset-top,0px)) 18px 20px; box-shadow:-8px 0 30px rgba(0,0,0,0.3);
+}
+.menu-item{
+  display:flex; align-items:center; gap:12px; padding:14px 10px; border-radius:16px; margin-bottom:8px;
+  background:rgba(255,255,255,0.25); cursor:pointer; font-weight:700; text-decoration:none; color:var(--text-main);
+}
+.toggle-row{display:flex; align-items:center; justify-content:space-between; padding:14px 10px;}
+.switch{position:relative; width:50px; height:28px; background:rgba(0,0,0,0.2); border-radius:20px; cursor:pointer;}
+.switch.on{background:var(--ok);}
+.switch .knob{position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%; background:#fff; transition:.2s;}
+.switch.on .knob{left:25px;}
+.toast{
+  position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%);
+  background:rgba(20,30,25,0.9); color:#fff; padding:12px 20px; border-radius:14px; font-weight:600; z-index:100;
+  box-shadow:0 8px 24px rgba(0,0,0,0.3); max-width:88%; text-align:center;
+}
+.login-wrap{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
+.login-card{
+  width:100%; max-width:400px; text-align:center; padding:32px 24px; border-radius:30px;
+  background:var(--panel); border:1px solid var(--panel-border); backdrop-filter:blur(22px);
+  box-shadow:var(--card-shadow);
+}
+.login-card .headline{font-size:2rem; font-weight:800; margin-bottom:4px;}
+.login-photo{width:110px; height:110px; border-radius:50%; margin:14px auto 6px; overflow:hidden; background:#fff; border:5px solid rgba(255,255,255,0.85); box-shadow:0 8px 20px rgba(0,0,0,0.2);}
+.login-photo img{width:100%; height:100%; object-fit:cover;}
+.role-btn{
+  width:100%; padding:16px; border-radius:18px; margin-top:14px; border:none; font-weight:700;
+  font-size:1.05rem; cursor:pointer; font-family:'Baloo Da 2',sans-serif;
+}
+.role-btn.admin{background:linear-gradient(135deg,#f0a06b,#c15b2f); color:#fff;}
+.role-btn.user{background:linear-gradient(135deg,var(--btn-a),var(--btn-b)); color:#fff;}
+.center-note{font-size:0.85rem; color:var(--text-soft); margin-top:16px;}
+.empty{text-align:center; color:var(--text-soft); padding:24px 10px; font-weight:600;}
+.spinner{width:40px; height:40px; border-radius:50%; border:4px solid rgba(255,255,255,0.4); border-top-color:var(--btn-b); animation:spin 0.9s linear infinite; margin:60px auto;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.tabs{display:flex; gap:8px; margin-bottom:14px;}
+.tab{flex:1; padding:10px; text-align:center; border-radius:14px; background:var(--panel); border:1px solid var(--panel-border); font-weight:700; cursor:pointer; font-size:0.88rem;}
+.tab.active{background:linear-gradient(135deg,var(--btn-a),var(--btn-b)); color:#fff;}
+.row2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.small-note{font-size:0.78rem; color:var(--text-soft); margin-top:6px;}
+</style>
+</head>
+<body>
+<div id="app"><div class="spinner"></div></div>
+
+<script>
+/* ---------------- state ---------------- */
+const S = {
+  db:null, assets:null, ready:false,
+  role: sessionStorage.getItem('hu_role') || null, // 'admin' | 'user' | null
+  screen: 'login',
+  settings: { name:'হামিদুল উলুম মাদ্রাসা', address:'কালিবাড়ি, সাতপাই, নেত্রকোনা', logoId:null, photoId:null, pin:'1234', feeAmount:500, helpPhone:'01700000000', imoPhone:'01700000000', whatsapp:'8801700000000' },
+  rules:'এখানে মাদ্রাসার নিয়ম-কানুন লেখা থাকবে। এডমিন এখান থেকে সম্পাদনা করতে পারবেন।',
+  departments:[{name:'হিফজ বিভাগ',count:0},{name:'নাজেরা বিভাগ',count:0},{name:'কিতাব বিভাগ',count:0},{name:'ইবতেদায়ী বিভাগ',count:0}],
+  notices:[], students:[], complaints:[], results:[], fees:[],
+  menuOpen:false,
+  temp:{}, // scratch for forms
+  toastMsg:null,
+};
+
+function toast(msg){ S.toastMsg = msg; render(); setTimeout(()=>{ S.toastMsg=null; render(); }, 2200); }
+function nav(screen, extra){ S.screen = screen; S.temp = extra||{}; S.menuOpen=false; window.scrollTo(0,0); render(); }
+function esc(s){ const d=document.createElement('div'); d.textContent = s==null?'':String(s); return d.innerHTML; }
+
+/* ---------------- theme ---------------- */
+function applyTheme(){
+  const t = localStorage.getItem('hu_theme');
+  if(t) document.documentElement.setAttribute('data-theme', t);
+}
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme') || (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  const next = cur==='dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('hu_theme', next);
+  render();
+}
+function isDark(){
+  const t = document.documentElement.getAttribute('data-theme');
+  if(t) return t==='dark';
+  return matchMedia('(prefers-color-scheme: dark)').matches;
+}
+applyTheme();
+
+/* ---------------- init capabilities ---------------- */
+async function init(){
+  try{
+    S.db = await window.claude?.use ? await claude.use('db') : null;
+  }catch(e){ S.db = null; }
+  try{
+    S.assets = window.claude?.use ? await claude.use('assets') : null;
+  }catch(e){ S.assets = null; }
+
+  if(S.db){
+    try{
+      const snap = await S.db.doc('settings/main').get();
+      if(snap.exists) Object.assign(S.settings, snap.data());
+      else await S.db.doc('settings/main').set(S.settings);
+    }catch(e){}
+    try{
+      const r = await S.db.doc('content/rules').get();
+      if(r.exists && r.data().text) S.rules = r.data().text;
+      else await S.db.doc('content/rules').set({text:S.rules});
+    }catch(e){}
+    try{
+      const dep = await S.db.doc('content/departments').get();
+      if(dep.exists && dep.data().items) S.departments = dep.data().items;
+      else await S.db.doc('content/departments').set({items:S.departments});
+    }catch(e){}
+
+    subscribeCollection('notices','notices');
+    subscribeCollection('students','students');
+    subscribeCollection('complaints','complaints');
+    subscribeCollection('results','results');
+    subscribeCollection('fees','fees');
+  }
+  S.ready = true;
+  S.screen = S.role ? 'home' : 'login';
+  render();
+}
+
+function subscribeCollection(path, key){
+  try{
+    S.db.collection(path).onSnapshot((qs)=>{
+      S[key] = qs.docs.map(d=>({id:d.id, ...d.data()}));
+      render();
+    }, ()=>{});
+  }catch(e){}
+}
+
+/* ---------------- persistence helpers ---------------- */
+async function saveSettings(patch){
+  Object.assign(S.settings, patch);
+  if(S.db){ try{ await S.db.doc('settings/main').set(S.settings); }catch(e){} }
+}
+async function saveRules(text){
+  S.rules = text;
+  if(S.db){ try{ await S.db.doc('content/rules').set({text}); }catch(e){} }
+}
+async function saveDepartments(items){
+  S.departments = items;
+  if(S.db){ try{ await S.db.doc('content/departments').set({items}); }catch(e){} }
+}
+async function uploadFile(file){
+  if(!S.assets) return null;
+  try{
+    const r = await S.assets.upload(file);
+    return r;
+  }catch(e){ toast('ছবি আপলোড ব্যর্থ হয়েছে'); return null; }
+}
+function blobUrl(id){ return id ? ('/_blob/'+id) : null; }
+
+/* ---------------- LOGIN ---------------- */
+function screenLogin(){
+  const s = S.settings;
+  return `
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-photo">${s.logoId? `<img src="${blobUrl(s.logoId)}">` : '🕌'}</div>
+      <div class="headline">${esc(s.name)}</div>
+      <div class="center-note" style="margin-top:2px;font-weight:600;">${esc(s.address)}</div>
+      <button class="role-btn user" onclick="App.chooseRole('user')">শিক্ষার্থী / অভিভাবক হিসেবে প্রবেশ</button>
+      <button class="role-btn admin" onclick="App.chooseRole('admin')">এডমিন হিসেবে প্রবেশ</button>
+      <div class="center-note">প্রবেশ করলে আপনি মাদ্রাসার নিয়মাবলীতে সম্মত হচ্ছেন বলে গণ্য হবে</div>
+    </div>
+  </div>`;
+}
+function chooseRole(role){
+  if(role==='admin'){
+    const pin = prompt('এডমিন পিন কোড দিন:');
+    if(pin === null) return;
+    if(pin !== S.settings.pin){ toast('ভুল পিন কোড'); return; }
+  }
+  S.role = role;
+  sessionStorage.setItem('hu_role', role);
+  nav('home');
+}
+function logout(){
+  S.role = null; sessionStorage.removeItem('hu_role');
+  nav('login');
+}
+
+/* ---------------- HOME ---------------- */
+const MENU_ITEMS = [
+  {key:'rules', label:'নিয়ম কানুন', sub:'মাদ্রাসার নীতিমালা'},
+  {key:'admission', label:'ভর্তি আবেদন', sub:'নতুন ভর্তি ফরম'},
+  {key:'fees', label:'মাসিক বেতন', sub:'পরিশোধ ও তালিকা'},
+  {key:'complaints', label:'অভিযোগ কেন্দ্র', sub:'অভিযোগ জানান'},
+  {key:'totalStudents', label:'মোট ছাত্র সংখ্যা', sub:'সার্বিক পরিসংখ্যান'},
+  {key:'departments', label:'বিভাগীয় ছাত্র', sub:'বিভাগ অনুযায়ী তালিকা'},
+  {key:'notices', label:'জরুরী নোটিশ', sub:'সর্বশেষ ঘোষণা'},
+  {key:'results', label:'পরীক্ষার ফলাফল', sub:'ফলাফল দেখুন'},
+];
+function screenHome(){
+  const s = S.settings;
+  const isAdmin = S.role==='admin';
+  return `
+  <div class="wrap">
+    <div class="topbar">
+      <div class="logo-circle" onclick="${isAdmin?'App.openLogoPicker()':''}">${s.logoId? `<img src="${blobUrl(s.logoId)}">`:'🕌'}</div>
+      <div class="iconbtn" onclick="App.toggleMenu()">☰</div>
+    </div>
+    <div class="header-card">
+      ${isAdmin?`<button class="edit-fab" onclick="App.openSettingsSheet()">✏️ সম্পাদনা</button>`:''}
+      <h1 class="headline">${esc(s.name)}</h1>
+      <p class="addr">${esc(s.address)}</p>
+      <div class="header-photo">${s.photoId? `<img src="${blobUrl(s.photoId)}">` : '🕌'}</div>
+    </div>
+    <div class="grid">
+      ${MENU_ITEMS.map((m,i)=>`
+        <button class="glass-btn ${i%2? 'alt':''}" onclick="App.nav('${m.key}')">${m.label}<span class="sub">${m.sub}</span></button>
+      `).join('')}
+    </div>
+    <div style="text-align:center;margin-top:22px;">
+      <button class="btn secondary" style="max-width:200px;margin:0 auto;" onclick="App.logout()">লগআউট (${isAdmin?'এডমিন':'ইউজার'})</button>
+    </div>
+  </div>
+  ${S.menuOpen ? menuPanel() : ''}
+  `;
+}
+function menuPanel(){
+  const s = S.settings;
+  const dark = isDark();
+  return `
+  <div class="overlay" onclick="if(event.target===this) App.toggleMenu()">
+    <div class="menu-panel" style="margin-left:auto;" onclick="event.stopPropagation()">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <div class="headline" style="font-size:1.3rem;">মেনু</div>
+        <div class="iconbtn" onclick="App.toggleMenu()">✕</div>
+      </div>
+      <div class="menu-item" onclick="App.nav('helpcenter')">🛟 <span>হেল্প সেন্টার</span></div>
+      <a class="menu-item" href="imo://chat?phone=${s.imoPhone}" onclick="App.imoFallback(event)">💬 <span>IMO কল</span></a>
+      <a class="menu-item" href="https://wa.me/${s.whatsapp}">📞 <span>WhatsApp কল</span></a>
+      <div class="panel" style="margin-top:14px;">
+        <div class="toggle-row">
+          <span style="font-weight:700;">ডার্ক মোড</span>
+          <div class="switch ${dark?'on':''}" onclick="App.toggleTheme()"><div class="knob"></div></div>
+        </div>
+      </div>
+      ${S.role==='admin'?`<button class="btn secondary" onclick="App.nav('settings')">⚙️ অ্যাপ সেটিংস</button>`:''}
+      <button class="btn danger" onclick="App.logout()">লগআউট</button>
+    </div>
+  </div>`;
+}
+function imoFallback(e){
+  setTimeout(()=>{ /* if imo app not installed, nothing else to do on web */ }, 300);
+}
+
+function screenHelpCenter(){
+  const s = S.settings;
+  return screenShell('হেল্প সেন্টার', `
+    <div class="panel">
+      <p>যেকোনো প্রয়োজনে আমাদের সাথে যোগাযোগ করুন:</p>
+      <a class="menu-item" href="imo://chat?phone=${s.imoPhone}">💬 IMO কল — ${s.imoPhone}</a>
+      <a class="menu-item" href="https://wa.me/${s.whatsapp}">📞 WhatsApp কল — ${s.whatsapp}</a>
+      <a class="menu-item" href="tel:${s.helpPhone}">☎️ সরাসরি কল — ${s.helpPhone}</a>
+    </div>
+  `);
+}
+
+/* ---------------- shared shell for sub-screens ---------------- */
+function screenShell(title, bodyHtml){
+  return `
+  <div class="wrap screen">
+    <div class="screen-head">
+      <div class="backbtn" onclick="App.nav('home')">←</div>
+      <h2 class="headline">${title}</h2>
+    </div>
+    ${bodyHtml}
+  </div>`;
+}
+
+/* ---------------- RULES ---------------- */
+function screenRules(){
+  const isAdmin = S.role==='admin';
+  const editing = S.temp.editing;
+  let body = '';
+  if(isAdmin && editing){
+    body = `
+    <div class="panel">
+      <textarea id="rulesTextarea" style="min-height:220px;">${esc(S.rules)}</textarea>
+      <button class="btn" onclick="App.saveRulesFromForm()">সংরক্ষণ করুন</button>
+      <button class="btn secondary" onclick="App.nav('rules')">বাতিল</button>
+    </div>`;
+  } else {
+    body = `
+    <div class="panel">
+      <p style="white-space:pre-wrap;line-height:1.7;">${esc(S.rules)}</p>
+      ${isAdmin?`<button class="btn secondary" onclick="App.nav('rules',{editing:true})">✏️ সম্পাদনা করুন</button>`:''}
+    </div>`;
+  }
+  return screenShell('নিয়ম কানুন', body);
+}
+function saveRulesFromForm(){
+  const v = document.getElementById('rulesTextarea').value;
+  saveRules(v); toast('সংরক্ষিত হয়েছে'); nav('rules');
+}
+
+/* ---------------- ADMISSION ---------------- */
+function screenAdmission(){
+  const isAdmin = S.role==='admin';
+  if(isAdmin) return screenAdmissionAdmin();
+  return screenAdmissionForm();
+}
+function screenAdmissionForm(){
+  const t = S.temp;
+  const body = `
+    <div class="panel">
+      <label>শিক্ষার্থীর নাম *</label><input type="text" id="f_name" value="${esc(t.name||'')}">
+      <label>পিতার নাম *</label><input type="text" id="f_father" value="${esc(t.father||'')}">
+      <label>মাতার নাম</label><input type="text" id="f_mother" value="${esc(t.mother||'')}">
+      <div class="row2">
+        <div><label>জন্ম তারিখ</label><input type="date" id="f_dob" value="${esc(t.dob||'')}"></div>
+        <div><label>মোবাইল নম্বর *</label><input type="tel" id="f_phone" value="${esc(t.phone||'')}"></div>
+      </div>
+      <label>ভর্তিচ্ছু শ্রেণি/বিভাগ</label>
+      <select id="f_dept">${S.departments.map(d=>`<option ${t.dept===d.name?'selected':''}>${esc(d.name)}</option>`).join('')}</select>
+      <label>ঠিকানা</label><textarea id="f_addr">${esc(t.addr||'')}</textarea>
+
+      <label>শিক্ষার্থীর পাসপোর্ট সাইজ ছবি *</label>
+      <div class="filebtn" onclick="document.getElementById('f_photo').click()">
+        ${t.photoUrl?`<img src="${t.photoUrl}">`:'📷'}
+        <span>${t.photoUrl?'ছবি পরিবর্তন করুন':'ছবি আপলোড করুন'}</span>
+      </div>
+      <input type="file" id="f_photo" accept="image/*" style="display:none" onchange="App.handleUpload(event,'photo')">
+
+      <label>জন্ম নিবন্ধন সনদের ছবি *</label>
+      <div class="filebtn" onclick="document.getElementById('f_birth').click()">
+        ${t.birthUrl?`<img src="${t.birthUrl}">`:'📄'}
+        <span>${t.birthUrl?'ছবি পরিবর্তন করুন':'ছবি আপলোড করুন'}</span>
+      </div>
+      <input type="file" id="f_birth" accept="image/*" style="display:none" onchange="App.handleUpload(event,'birth')">
+
+      <label>ভর্তি ফি পরিশোধ</label>
+      <div class="row2">
+        <button class="btn ${t.payMethod==='নগদ'?'':'secondary'}" style="margin-top:0" onclick="App.setTemp('payMethod','নগদ')">নগদ</button>
+        <button class="btn ${t.payMethod==='বিকাশ'?'':'secondary'}" style="margin-top:0" onclick="App.setTemp('payMethod','বিকাশ')">বিকাশ</button>
+      </div>
+      ${t.payMethod?`
+        <label>${t.payMethod} নম্বর</label><input type="tel" id="f_paynum" value="${esc(t.paynum||'')}">
+        <p class="small-note">অনুগ্রহ করে ভর্তি ফি প্রদান করুন এবং নম্বরটি লিখুন। এডমিন যাচাই করে ভর্তি নিশ্চিত করবেন।</p>
+      `:''}
+
+      <button class="btn" onclick="App.submitAdmission()">আবেদন জমা দিন</button>
+    </div>
+  `;
+  return screenShell('ভর্তি আবেদন', body);
+}
+function setTemp(k,v){ S.temp[k]=v; render(); }
+async function handleUpload(e, kind){
+  const file = e.target.files[0];
+  if(!file) return;
+  const previewUrl = URL.createObjectURL(file);
+  if(kind==='photo') S.temp.photoUrl = previewUrl;
+  if(kind==='birth') S.temp.birthUrl = previewUrl;
+  render();
+  const r = await uploadFile(file);
+  if(r){
+    if(kind==='photo'){ S.temp.photoId = r.id; S.temp.photoUrl = r.url; }
+    if(kind==='birth'){ S.temp.birthId = r.id; S.temp.birthUrl = r.url; }
+    render();
+  }
+}
+async function submitAdmission(){
+  const t = S.temp;
+  const name = document.getElementById('f_name').value.trim();
+  const father = document.getElementById('f_father').value.trim();
+  const mother = document.getElementById('f_mother').value.trim();
+  const dob = document.getElementById('f_dob').value;
+  const phone = document.getElementById('f_phone').value.trim();
+  const dept = document.getElementById('f_dept').value;
+  const addr = document.getElementById('f_addr').value.trim();
+  if(!name || !father || !phone){ toast('নাম, পিতার নাম ও মোবাইল নম্বর আবশ্যক'); return; }
+  if(!t.photoId){ toast('পাসপোর্ট সাইজ ছবি আপলোড করুন'); return; }
+  if(!t.birthId){ toast('জন্ম নিবন্ধনের ছবি আপলোড করুন'); return; }
+  const paynum = t.payMethod ? (document.getElementById('f_paynum')?.value.trim()||'') : '';
+  const doc = {
+    name, father, mother, dob, phone, department:dept, address:addr,
+    photoId:t.photoId, birthId:t.birthId,
+    paymentMethod:t.payMethod||null, paymentNumber:paynum||null,
+    status:'pending', createdAt: new Date().toISOString()
+  };
+  if(S.db){ try{ await S.db.collection('students').add(doc); }catch(e){ toast('জমা দিতে ব্যর্থ হয়েছে'); return; } }
+  toast('আবেদন সফলভাবে জমা হয়েছে ✅');
+  nav('home');
+}
+function screenAdmissionAdmin(){
+  const pending = S.students.filter(s=>s.status!=='approved');
+  const approved = S.students.filter(s=>s.status==='approved');
+  const list = (arr, showApprove)=> arr.length? arr.map(s=>`
+    <div class="list-item" style="align-items:flex-start;">
+      <img src="${blobUrl(s.photoId)}" style="width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;">
+      <div style="flex:1;">
+        <div style="font-weight:700;">${esc(s.name)} <span class="badge ${s.status==='approved'?'paid':'pending'}">${s.status==='approved'?'ভর্তি নিশ্চিত':'অপেক্ষমান'}</span></div>
+        <div class="meta">পিতা: ${esc(s.father)} • ফোন: ${esc(s.phone)} • বিভাগ: ${esc(s.department||'-')}</div>
+        <div class="meta">পেমেন্ট: ${esc(s.paymentMethod||'—')} ${esc(s.paymentNumber||'')}</div>
+        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="${blobUrl(s.birthId)}" target="_blank" style="font-size:0.8rem;font-weight:700;">📄 জন্মসনদ দেখুন</a>
+          ${showApprove?`<button class="btn secondary" style="margin:0;padding:6px 12px;width:auto;" onclick="App.approveStudent('${s.id}')">ভর্তি নিশ্চিত করুন</button>`:''}
+          <button class="btn danger" style="margin:0;padding:6px 12px;width:auto;" onclick="App.deleteStudent('${s.id}')">মুছুন</button>
+        </div>
+      </div>
+    </div>
+  `).join('') : `<div class="empty">কোনো তথ্য নেই</div>`;
+  const body = `
+    <div class="panel"><b>অপেক্ষমান আবেদন (${pending.length})</b></div>
+    ${list(pending,true)}
+    <div class="panel" style="margin-top:18px;"><b>ভর্তিকৃত শিক্ষার্থী (${approved.length})</b></div>
+    ${list(approved,false)}
+  `;
+  return screenShell('ভর্তি আবেদন', body);
+}
+async function approveStudent(id){
+  if(S.db){ try{ await S.db.collection('students').doc(id).update({status:'approved'}); toast('ভর্তি নিশ্চিত হয়েছে'); }catch(e){} }
+}
+async function deleteStudent(id){
+  if(!confirm('মুছে ফেলবেন?')) return;
+  if(S.db){ try{ await S.db.collection('students').doc(id).delete(); toast('মুছে ফেলা হয়েছে'); }catch(e){} }
+}
+
+/* ---------------- FEES ---------------- */
+const MONTH_NAMES = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+function last6Months(){
+  const arr=[]; const d = new Date();
+  for(let i=0;i<6;i++){
+    const m = d.getMonth()+1, y = d.getFullYear();
+    arr.push({month:m, year:y, label:MONTH_NAMES[m-1]+' '+y});
+    d.setMonth(d.getMonth()-1);
+  }
+  return arr;
+}
+function feeDocId(studentId,year,month){ return studentId+'_'+year+'_'+String(month).padStart(2,'0'); }
+function getFee(studentId,year,month){
+  return S.fees.find(f=>f.studentId===studentId && f.year===year && f.month===month);
+}
+function screenFees(){
+  if(S.role==='admin') return screenFeesAdmin();
+  return screenFeesUser();
+}
+function screenFeesUser(){
+  const t = S.temp;
+  if(!t.foundStudent){
+    return screenShell('মাসিক বেতন', `
+      <div class="panel">
+        <label>আপনার মোবাইল নম্বর দিন</label>
+        <input type="tel" id="feePhone" value="${esc(t.phoneInput||'')}">
+        <button class="btn" onclick="App.lookupStudentForFee()">খুঁজুন</button>
+        ${t.notFound?`<p class="small-note" style="color:var(--danger);">এই নম্বরে কোনো ভর্তিকৃত শিক্ষার্থী পাওয়া যায়নি</p>`:''}
+      </div>
+    `);
+  }
+  const st = t.foundStudent;
+  const months = last6Months();
+  const rows = months.map(m=>{
+    const f = getFee(st.id, m.year, m.month);
+    const paid = f && f.paid;
+    return `
+    <div class="list-item">
+      <div><b>${m.label}</b><div class="meta">বেতন: ৳${S.settings.feeAmount}</div></div>
+      ${paid? `<span class="badge paid">পরিশোধিত ✅</span>` : `<button class="btn" style="margin:0;width:auto;padding:10px 16px;" onclick="App.openFeePay('${st.id}','${st.name}',${m.year},${m.month})">পরিশোধ করুন</button>`}
+    </div>`;
+  }).join('');
+  const body = `
+    <div class="panel">
+      <b>${esc(st.name)}</b><div class="meta">পিতা: ${esc(st.father)} • বিভাগ: ${esc(st.department||'-')}</div>
+      <button class="btn secondary" style="margin-top:12px;" onclick="App.setTemp('foundStudent',null)">অন্য নম্বর দিয়ে খুঁজুন</button>
+    </div>
+    ${rows}
+  `;
+  const html = screenShell('মাসিক বেতন', body);
+  return html + (t.payModal? feePayModal(t.payModal) : '');
+}
+function lookupStudentForFee(){
+  const phone = document.getElementById('feePhone').value.trim();
+  const found = S.students.find(s=>s.phone===phone && s.status==='approved');
+  S.temp.phoneInput = phone;
+  if(found){ S.temp.foundStudent = found; S.temp.notFound=false; }
+  else { S.temp.notFound = true; }
+  render();
+}
+function openFeePay(studentId,studentName,year,month){
+  S.temp.payModal = {studentId,studentName,year,month,method:null,number:''};
+  render();
+}
+function feePayModal(m){
+  return `
+  <div class="overlay" onclick="if(event.target===this) App.closeFeeModal()">
+    <div class="sheet" onclick="event.stopPropagation()">
+      <div class="headline" style="font-size:1.3rem;margin-bottom:10px;">বেতন পরিশোধ — ${MONTH_NAMES[m.month-1]} ${m.year}</div>
+      <p>পরিমাণ: <b>৳${S.settings.feeAmount}</b></p>
+      <div class="row2" style="margin-top:10px;">
+        <button class="btn ${m.method==='নগদ'?'':'secondary'}" style="margin-top:0" onclick="App.setFeeMethod('নগদ')">নগদ</button>
+        <button class="btn ${m.method==='বিকাশ'?'':'secondary'}" style="margin-top:0" onclick="App.setFeeMethod('বিকাশ')">বিকাশ</button>
+      </div>
+      ${m.method?`
+        <label>${m.method} নম্বর</label>
+        <input type="tel" id="feePayNum" value="${esc(m.number||'')}">
+        <button class="btn" onclick="App.confirmFeePay()">পেমেন্ট সম্পন্ন করুন</button>
+      `:''}
+      <button class="btn secondary" onclick="App.closeFeeModal()">বাতিল</button>
+    </div>
+  </div>`;
+}
+function setFeeMethod(method){ S.temp.payModal.method = method; render(); }
+function closeFeeModal(){ S.temp.payModal = null; render(); }
+async function confirmFeePay(){
+  const m = S.temp.payModal;
+  const number = document.getElementById('feePayNum').value.trim();
+  if(!number){ toast('নম্বর দিন'); return; }
+  const id = feeDocId(m.studentId, m.year, m.month);
+  const data = {studentId:m.studentId, studentName:m.studentName, year:m.year, month:m.month, amount:S.settings.feeAmount, paid:true, method:m.method, payNumber:number, paidAt:new Date().toISOString()};
+  if(S.db){ try{ await S.db.collection('fees').doc(id).set(data); }catch(e){} }
+  S.temp.payModal = null;
+  toast('পরিশোধিত হয়েছে ✅');
+  render();
+}
+function screenFeesAdmin(){
+  const students = S.students.filter(s=>s.status==='approved');
+  const now = new Date(); const y = now.getFullYear(), mo = now.getMonth()+1;
+  const rows = students.length? students.map(s=>{
+    const f = getFee(s.id,y,mo);
+    const paid = f && f.paid;
+    return `
+    <div class="list-item">
+      <div><b>${esc(s.name)}</b><div class="meta">${esc(s.phone)} • ${MONTH_NAMES[mo-1]} ${y}</div></div>
+      ${paid?`<span class="badge paid">পরিশোধিত</span>`:
+        `<button class="btn" style="margin:0;width:auto;padding:8px 14px;" onclick="App.markFeePaidAdmin('${s.id}','${esc(s.name)}',${y},${mo})">পরিশোধিত করুন</button>`}
+    </div>`;
+  }).join('') : `<div class="empty">কোনো ভর্তিকৃত শিক্ষার্থী নেই</div>`;
+  const body = `
+    <div class="panel">
+      <label>মাসিক বেতনের পরিমাণ (৳)</label>
+      <input type="number" id="feeAmountInput" value="${S.settings.feeAmount}">
+      <button class="btn secondary" onclick="App.saveFeeAmount()">হালনাগাদ করুন</button>
+    </div>
+    <div class="panel"><b>চলতি মাসের বেতন অবস্থা — ${MONTH_NAMES[mo-1]} ${y}</b></div>
+    ${rows}
+  `;
+  return screenShell('মাসিক বেতন', body);
+}
+function saveFeeAmount(){
+  const v = parseInt(document.getElementById('feeAmountInput').value)||0;
+  saveSettings({feeAmount:v}); toast('হালনাগাদ হয়েছে'); render();
+}
+async function markFeePaidAdmin(studentId,studentName,year,month){
+  const id = feeDocId(studentId,year,month);
+  const data = {studentId,studentName,year,month,amount:S.settings.feeAmount,paid:true,method:'ম্যানুয়াল',paidAt:new Date().toISOString()};
+  if(S.db){ try{ await S.db.collection('fees').doc(id).set(data); toast('পরিশোধিত হিসেবে চিহ্নিত হয়েছে'); }catch(e){} }
+}
+
+/* ---------------- COMPLAINTS ---------------- */
+function screenComplaints(){
+  const isAdmin = S.role==='admin';
+  if(isAdmin){
+    const list = S.complaints.length? S.complaints.slice().reverse().map(c=>`
+      <div class="list-item" style="align-items:flex-start;">
+        <div style="flex:1;">
+          <b>${esc(c.name)}</b> <span class="meta">${esc(c.phone)}</span>
+          <div class="meta">${esc(c.date? new Date(c.date).toLocaleString('bn-BD'):'')}</div>
+          <p style="margin:6px 0 0;">${esc(c.message)}</p>
+        </div>
+        <span class="badge ${c.status==='resolved'?'paid':'pending'}" style="cursor:pointer;" onclick="App.toggleComplaint('${c.id}','${c.status}')">${c.status==='resolved'?'সমাধান হয়েছে':'অপেক্ষমান'}</span>
+      </div>
+    `).join('') : `<div class="empty">কোনো অভিযোগ নেই</div>`;
+    return screenShell('অভিযোগ কেন্দ্র', list);
+  }
+  const t = S.temp;
+  const body = `
+    <div class="panel">
+      <label>আপনার নাম</label><input type="text" id="c_name" value="${esc(t.name||'')}">
+      <label>মোবাইল নম্বর</label><input type="tel" id="c_phone" value="${esc(t.phone||'')}">
+      <label>অভিযোগ লিখুন</label><textarea id="c_msg">${esc(t.msg||'')}</textarea>
+      <button class="btn" onclick="App.submitComplaint()">জমা দিন</button>
+    </div>
+  `;
+  return screenShell('অভিযোগ কেন্দ্র', body);
+}
+async function submitComplaint(){
+  const name = document.getElementById('c_name').value.trim();
+  const phone = document.getElementById('c_phone').value.trim();
+  const message = document.getElementById('c_msg').value.trim();
+  if(!name || !message){ toast('নাম ও অভিযোগ লিখুন'); return; }
+  if(S.db){ try{ await S.db.collection('complaints').add({name,phone,message,date:new Date().toISOString(),status:'pending'}); }catch(e){} }
+  toast('অভিযোগ জমা হয়েছে');
+  nav('home');
+}
+async function toggleComplaint(id, cur){
+  if(S.db){ try{ await S.db.collection('complaints').doc(id).update({status: cur==='resolved'?'pending':'resolved'}); }catch(e){} }
+}
+
+/* ---------------- TOTAL STUDENTS ---------------- */
+function screenTotalStudents(){
+  const total = S.students.filter(s=>s.status==='approved').length;
+  const body = `
+    <div class="panel" style="text-align:center;">
+      <div style="font-size:3.4rem;font-weight:800;" class="headline">${total}</div>
+      <div style="font-weight:700;color:var(--text-soft);">মোট ভর্তিকৃত শিক্ষার্থী</div>
+    </div>
+    <div class="panel">
+      <b>বিভাগ ভিত্তিক সারাংশ</b>
+      ${S.departments.map(d=>{
+        const c = S.students.filter(s=>s.status==='approved' && s.department===d.name).length;
+        return `<div class="list-item"><span>${esc(d.name)}</span><b>${c}</b></div>`;
+      }).join('')}
+    </div>
+  `;
+  return screenShell('মোট ছাত্র সংখ্যা', body);
+}
+
+/* ---------------- DEPARTMENTS ---------------- */
+function screenDepartments(){
+  const isAdmin = S.role==='admin';
+  const body = `
+    ${S.departments.map((d,i)=>{
+      const c = S.students.filter(s=>s.status==='approved' && s.department===d.name).length;
+      return `<div class="list-item">
+        <span>${esc(d.name)}</span>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <b>${c} জন</b>
+          ${isAdmin?`<span onclick="App.deleteDept(${i})" style="cursor:pointer;">🗑️</span>`:''}
+        </div>
+      </div>`;
+    }).join('')}
+    ${isAdmin?`
+    <div class="panel" style="margin-top:16px;">
+      <label>নতুন বিভাগ যোগ করুন</label>
+      <input type="text" id="newDeptName" placeholder="যেমন: হিফজ বিভাগ">
+      <button class="btn secondary" onclick="App.addDept()">যোগ করুন</button>
+    </div>`:''}
+  `;
+  return screenShell('বিভাগীয় ছাত্র', body);
+}
+function addDept(){
+  const v = document.getElementById('newDeptName').value.trim();
+  if(!v) return;
+  const items = S.departments.concat([{name:v,count:0}]);
+  saveDepartments(items); toast('যোগ হয়েছে'); render();
+}
+function deleteDept(i){
+  const items = S.departments.slice(); items.splice(i,1);
+  saveDepartments(items); render();
+}
+
+/* ---------------- NOTICES ---------------- */
+function screenNotices(){
+  const isAdmin = S.role==='admin';
+  const sorted = S.notices.slice().sort((a,b)=> new Date(b.createdAt)-new Date(a.createdAt));
+  const list = sorted.length? sorted.map(n=>`
+    <div class="list-item" style="align-items:flex-start;">
+      <div style="flex:1;">
+        <div class="meta">${new Date(n.createdAt).toLocaleDateString('bn-BD')}</div>
+        <p style="margin:4px 0 0;font-weight:600;">${esc(n.text)}</p>
+      </div>
+      ${isAdmin?`<span onclick="App.deleteNotice('${n.id}')" style="cursor:pointer;">🗑️</span>`:''}
+    </div>
+  `).join('') : `<div class="empty">কোনো নোটিশ নেই</div>`;
+  const body = `
+    ${isAdmin?`
+    <div class="panel">
+      <label>নতুন নোটিশ লিখুন</label>
+      <textarea id="noticeText"></textarea>
+      <button class="btn" onclick="App.addNotice()">প্রকাশ করুন</button>
+    </div>`:''}
+    ${list}
+  `;
+  return screenShell('জরুরী নোটিশ', body);
+}
+async function addNotice(){
+  const v = document.getElementById('noticeText').value.trim();
+  if(!v) return;
+  if(S.db){ try{ await S.db.collection('notices').add({text:v, createdAt:new Date().toISOString()}); }catch(e){} }
+  toast('নোটিশ প্রকাশিত হয়েছে');
+  render();
+}
+async function deleteNotice(id){
+  if(S.db){ try{ await S.db.collection('notices').doc(id).delete(); }catch(e){} }
+}
+
+/* ---------------- RESULTS ---------------- */
+function screenResults(){
+  const isAdmin = S.role==='admin';
+  const sorted = S.results.slice().reverse();
+  const list = sorted.length? sorted.map(r=>`
+    <div class="list-item" style="align-items:flex-start;">
+      <div style="flex:1;">
+        <b>${esc(r.studentName)}</b> <span class="meta">${esc(r.className||'')}</span>
+        <p style="margin:4px 0 0;">${esc(r.result)}</p>
+      </div>
+      ${isAdmin?`<span onclick="App.deleteResult('${r.id}')" style="cursor:pointer;">🗑️</span>`:''}
+    </div>
+  `).join('') : `<div class="empty">কোনো ফলাফল প্রকাশিত হয়নি</div>`;
+  const body = `
+    ${isAdmin?`
+    <div class="panel">
+      <label>শিক্ষার্থীর নাম</label><input type="text" id="r_name">
+      <label>শ্রেণি/বিভাগ</label><input type="text" id="r_class">
+      <label>ফলাফল</label><textarea id="r_result" placeholder="যেমন: হিফজ সম্পন্ন, মুমতাজ গ্রেড"></textarea>
+      <button class="btn" onclick="App.addResult()">প্রকাশ করুন</button>
+    </div>`:''}
+    ${list}
+  `;
+  return screenShell('পরীক্ষার ফলাফল', body);
+}
+async function addResult(){
+  const studentName = document.getElementById('r_name').value.trim();
+  const className = document.getElementById('r_class').value.trim();
+  const result = document.getElementById('r_result').value.trim();
+  if(!studentName || !result) return;
+  if(S.db){ try{ await S.db.collection('results').add({studentName,className,result,createdAt:new Date().toISOString()}); }catch(e){} }
+  toast('ফলাফল প্রকাশিত হয়েছে');
+  render();
+}
+async function deleteResult(id){
+  if(S.db){ try{ await S.db.collection('results').doc(id).delete(); }catch(e){} }
+}
+
+/* ---------------- ADMIN SETTINGS ---------------- */
+function screenSettings(){
+  const s = S.settings;
+  const body = `
+    <div class="panel">
+      <label>মাদ্রাসার নাম</label><input type="text" id="s_name" value="${esc(s.name)}">
+      <label>ঠিকানা</label><input type="text" id="s_addr" value="${esc(s.address)}">
+      <label>লোগো (উপরে বাম পাশে)</label>
+      <div class="filebtn" onclick="document.getElementById('s_logo').click()">
+        ${s.logoId?`<img src="${blobUrl(s.logoId)}">`:'🕌'}<span>পরিবর্তন করুন</span>
+      </div>
+      <input type="file" id="s_logo" accept="image/*" style="display:none" onchange="App.handleSettingsUpload(event,'logoId')">
+      <label>প্রধান ছবি (হেডার কার্ডে)</label>
+      <div class="filebtn" onclick="document.getElementById('s_photo').click()">
+        ${s.photoId?`<img src="${blobUrl(s.photoId)}">`:'🕌'}<span>পরিবর্তন করুন</span>
+      </div>
+      <input type="file" id="s_photo" accept="image/*" style="display:none" onchange="App.handleSettingsUpload(event,'photoId')">
+      <label>এডমিন পিন কোড</label><input type="text" id="s_pin" value="${esc(s.pin)}">
+      <label>হেল্প সেন্টার ফোন নম্বর</label><input type="tel" id="s_help" value="${esc(s.helpPhone)}">
+      <label>IMO নম্বর</label><input type="tel" id="s_imo" value="${esc(s.imoPhone)}">
+      <label>WhatsApp নম্বর (কান্ট্রি কোডসহ, যেমন 8801XXXXXXXXX)</label><input type="tel" id="s_wa" value="${esc(s.whatsapp)}">
+      <button class="btn" onclick="App.saveSettingsForm()">সংরক্ষণ করুন</button>
+    </div>
+  `;
+  return screenShell('অ্যাপ সেটিংস', body);
+}
+async function handleSettingsUpload(e, field){
+  const file = e.target.files[0];
+  if(!file) return;
+  toast('আপলোড হচ্ছে...');
+  const r = await uploadFile(file);
+  if(r){ await saveSettings({[field]:r.id}); toast('আপডেট হয়েছে'); render(); }
+}
+function saveSettingsForm(){
+  saveSettings({
+    name: document.getElementById('s_name').value.trim(),
+    address: document.getElementById('s_addr').value.trim(),
+    pin: document.getElementById('s_pin').value.trim(),
+    helpPhone: document.getElementById('s_help').value.trim(),
+    imoPhone: document.getElementById('s_imo').value.trim(),
+    whatsapp: document.getElementById('s_wa').value.trim(),
+  });
+  toast('সংরক্ষিত হয়েছে');
+  nav('home');
+}
+function openSettingsSheet(){ nav('settings'); }
+function openLogoPicker(){ nav('settings'); }
+
+/* ---------------- ROUTER ---------------- */
+function render(){
+  const app = document.getElementById('app');
+  if(!S.ready){ app.innerHTML = '<div class="spinner"></div>'; return; }
+  let html = '';
+  if(!S.role){ html = screenLogin(); }
+  else {
+    switch(S.screen){
+      case 'home': html = screenHome(); break;
+      case 'rules': html = screenRules(); break;
+      case 'admission': html = screenAdmission(); break;
+      case 'fees': html = screenFees(); break;
+      case 'complaints': html = screenComplaints(); break;
+      case 'totalStudents': html = screenTotalStudents(); break;
+      case 'departments': html = screenDepartments(); break;
+      case 'notices': html = screenNotices(); break;
+      case 'results': html = screenResults(); break;
+      case 'settings': html = S.role==='admin'? screenSettings() : screenHome(); break;
+      case 'helpcenter': html = screenHelpCenter(); break;
+      default: html = screenHome();
+    }
+    if(S.menuOpen && S.screen==='home') { /* already appended in screenHome */ }
+  }
+  if(S.toastMsg) html += `<div class="toast">${esc(S.toastMsg)}</div>`;
+  app.innerHTML = html;
+}
+function toggleMenu(){ S.menuOpen = !S.menuOpen; render(); }
+
+/* ---------------- expose ---------------- */
+window.App = {
+  nav, chooseRole, logout, toggleMenu, toggleTheme, imoFallback,
+  setTemp, handleUpload, submitAdmission, approveStudent, deleteStudent,
+  lookupStudentForFee, openFeePay, setFeeMethod, closeFeeModal, confirmFeePay, markFeePaidAdmin, saveFeeAmount,
+  submitComplaint, toggleComplaint,
+  addDept, deleteDept,
+  addNotice, deleteNotice,
+  addResult, deleteResult,
+  handleSettingsUpload, saveSettingsForm, openSettingsSheet, openLogoPicker,
+  saveRulesFromForm,
+};
+
+init();
+</script>
+</body>
+</html>
